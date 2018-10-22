@@ -15,7 +15,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("938750905686-krm3o32tgqofhdb05mivarep1et459sm.apps.googleusercontent.com");
 const fileUpload = require('express-fileupload');
 const request = require("request");
@@ -38,8 +38,8 @@ const port = process.env.PORT || 3001;
 // let favicon = require('serve-favicon');
 // app.use(bodyParser.urlencoded({parameterLimit: 100000, limit: '50mb', extended: true}));
 // app.use(bodyParser.json());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //TODO only allow cors for specific endpoints, not all: https://github.com/expressjs/cors#enable-cors-for-a-single-route
@@ -106,5 +106,5 @@ module.exports = app;
 
 //starts the server and listens for requests
 app.listen(port, function () {
-    console.log(`Api running on port ${port}`);
+    console.log(`Api running on port:: ${port}`);
 });
