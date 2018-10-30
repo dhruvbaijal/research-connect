@@ -4,7 +4,7 @@ import './OpportunityPage.scss';
 import Navbar from '../../components/Navbars/StudentNavbar/StudentNavbar';
 import ProfessorNavbar from '../../components/Navbars/ProfessorNavbar/ProfessorNavbar';
 import Footer from '../../components/Footer/Footer';
-
+import { Container, Row, Col } from 'reactstrap';
 import CheckBox from 'react-icons/lib/fa/check-square-o';
 import Check from 'react-icons/lib/fa/check';
 import Minus from 'react-icons/lib/fa/minus';
@@ -217,59 +217,65 @@ class OpportunityPage extends Component {
 
     parseYears(yearsArray) {
 
-        let yearDivArray = [];
-        if (yearsArray) {
-            let trackYear = false;
-            if (yearsArray.includes("senior")) {
-                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Senior") {
-                    yearDivArray.push(<div key="se"><Check color='blue' name='users' /><span > Senior</span></div>)
-                } else {
-                    yearDivArray.push(<div key="se"><Minus className="cross" /><span > Senior</span></div>)
+        let yearDivArray = []; let trackYear = false;
+        if (yearsArray && this.state.student) {
 
-                }
-                trackYear = true;
-            }
-            if (yearsArray.includes("junior")) {
-                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Junior") {
-                    yearDivArray.push(<div key="j"><Check color='blue' name='users' /><span > Junior</span></div>)
-                } else {
-                    yearDivArray.push(<div key="j"><Minus className="cross" /><span > Junior</span></div>)
 
-                }
-                trackYear = true;
-            }
-            if (yearsArray.includes("sophomore")) {
-                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Sophomore") {
-                    yearDivArray.push(<div key="so"><Check color='blue' name='users' /><span > Sophomore</span></div>)
-                }
-                else {
-                    yearDivArray.push(<div key="so"><Minus className="cross" /><span > Sophomore</span></div>)
-                }
-                trackYear = true;
-            }
             if (yearsArray.includes("freshman")) {
                 if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Freshman") {
-                    yearDivArray.push(<div key="f"><Check color='blue' name='users' /><span key="fresh"> Freshman</span>
+                    yearDivArray.push(<div key="f"><Check className="greenCheck" /><span key="fresh"> Freshman</span>
                     </div>)
                 }
-                else {
+                else if (!yearsArray.includes("sophomore") || !yearsArray.includes("junior") || !yearsArray.includes("senior")) {
                     yearDivArray.push(<div key="f"><Minus className="cross" /><span key="fresh"> Freshman</span>
                     </div>)
                 }
                 trackYear = true;
             }
+            if (yearsArray.includes("sophomore")) {
+                if (Utils.gradYearToString(this.state.student.gradYear) === "Sophomore") {
+                    yearDivArray.push(<div key="so"><Check className="greenCheck" /><span > Sophomore</span></div>)
+                }
+                else if (!yearsArray.includes("junior") || !yearArray.includes("senior") || yearsArray.includes("sophomore")) {
+                    yearDivArray.push(<div key="so"><Minus className="cross" /><span > Sophomore</span></div>)
+                }
+                trackYear = true;
+            }
+            if (yearsArray.includes("junior")) {
+                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Junior") {
+                    yearDivArray.push(<div key="j"><Check className="greenCheck" /><span > Junior</span></div>)
+                } else if (!yearsArray.includes("sophomore") && yearsArray.includes("junior")) {
+                    yearDivArray.push(<div key="j"><Minus className="cross" /><span > Junior</span></div>)
 
-            if (trackYear) {
-                return <ul>{yearDivArray}</ul>;
+                }
+                trackYear = true;
             }
-            else {
-                return <ul>
-                    <div key="n"><span> No Preference</span></div>
-                </ul>
+            if (yearsArray.includes("senior")) {
+                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Senior") {
+                    yearDivArray.push(<div key="se"><Check className="greenCheck" /><span > Senior</span></div>)
+                } else if (
+                    Utils.gradYearToString(this.state.student.gradYear) = "Senior") {
+                    yearDivArray.push(<div key="se"><Minus className="cross" /><span > Senior</span></div>)
+
+                }
+                trackYear = true;
             }
+
+
+        }
+
+
+        if (trackYear) {
+            return <ul>{yearDivArray}</ul>;
+        }
+        else {
+            return <ul>
+                <div key="n"><span> No Preference</span></div>
+            </ul>
         }
 
     }
+
 
     parseMajors(arrayIn) {
         let returnArray = [];
@@ -349,33 +355,44 @@ class OpportunityPage extends Component {
                     <div className="opportunities-page-wrapper">
                         <div className="cover-photo"></div>
                         <div className="container opportunityListing">
-                            <div className="row first-row">
+                            <div class="top">
+                                <div className="row first-row">
 
-                                <div className="title-container column column-65">
-                                    <div className="title-box">
-                                        <div className="title-first-col ">
-                                            <h4>{this.state.opportunity.title}</h4>
-                                            <h6> Lab: {this.state.opportunity.labName}</h6>
-                                            {/*<h6> Professor: {this.state.opportunity.pi}</h6>*/}
+                                    <div className="title-container column column-65">
+                                        <div className="title-box">
+                                            <div className="title-first-col ">
+                                                <h4>{this.state.opportunity.title}</h4>
+                                                <h6> Lab: {this.state.opportunity.labName}</h6>
+                                                <h6> Professor: {this.state.opportunity.pi}</h6>
+                                            </div>
+                                            <div className="title-second-col">
+                                                <a className="button" href={"/EditOpp?Id=" + this.getId() + "/"}>Edit Opportunity</a>
+
+                                            </div>
                                         </div>
-                                        <div className="title-second-col">
-                                            <a className="button" href={"/EditOpp?Id=" + this.getId() + "/"}>Edit Opportunity</a>
+                                        <div className="about-box">
+                                            <div className="title-first-col ">
+                                                <h5> Supervisor!!:</h5> <p>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</p>
+                                                <h5> Qualifications:</h5> <p>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</p>
+                                                <h5> Tasks:</h5> <p>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</p>
+                                                <h5> Start Season:</h5>
+                                                <p>{this.state.opportunity.startSeason ? this.state.opportunity.startSeason : "(Season not specified) "} {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}</p>
+                                                <h5> Weekly Hours:</h5> <p>{this.state.opportunity.minHours ? this.state.opportunity.minHours + " " : "No minimum "}
+                                                    - {this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week. </p>
+                                                <h5> Project Description:</h5> <p>{this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}</p>
+                                                <h5>Lab:</h5>
+                                                {/*<a href={this.state.opportunity.labPage}>{this.state.opportunity.labName}</a>*/}
+                                                <p>{this.state.opportunity.labDescription}</p>
+                                            </div>
+                                            <div className="title-second-col">
+                                                <h5>Department</h5>
+                                                <h5>Areas of Interest</h5>
+                                                <h5>Credit Option</h5>
+                                            </div>
+
+
 
                                         </div>
-                                    </div>
-                                    <div className="about-box">
-                                        <h5> Supervisor:</h5> <p>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</p>
-                                        <h5> Qualifications:</h5> <p>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</p>
-                                        <h5> Tasks:</h5> <p>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</p>
-                                        <h5> Start Season:</h5>
-                                        <p>{this.state.opportunity.startSeason ? this.state.opportunity.startSeason : "(Season not specified) "} {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}</p>
-                                        <h5> Weekly Hours:</h5> <p>{this.state.opportunity.minHours ? this.state.opportunity.minHours + " " : "No minimum "}
-                                            - {this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week. </p>
-                                        <h5> Project Description:</h5> <p>{this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}</p>
-                                        <h5>Lab:</h5>
-                                        {/*<a href={this.state.opportunity.labPage}>{this.state.opportunity.labName}</a>*/}
-                                        <p>{this.state.opportunity.labDescription}</p>
-
                                     </div>
                                 </div>
 
@@ -445,18 +462,28 @@ class OpportunityPage extends Component {
                                         </div>
                                     </div>
                                     <div className="about-box">
-                                        <h5> Supervisor:</h5> <p>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</p>
-                                        <h5> Qualifications:</h5> <p>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</p>
-                                        <h5> Tasks:</h5> <p>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</p>
-                                        <h5> Start Season:</h5>
-                                        <p>{this.state.opportunity.startSeason ? this.state.opportunity.startSeason : "(Season not specified) "} {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}</p>
-                                        <h5> Weekly Hours:</h5> <p>{this.state.opportunity.minHours ? this.state.opportunity.minHours + " " : "No minimum "}
-                                            - {this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week. </p>
-                                        <h5> Project Description:</h5> <p>{this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}</p>
-                                        <h5>Lab:</h5>
-                                        {/*If there's no lab description or it's a ghost post*/}
-                                        <p>{this.state.opportunity.labDescription && (!this.state.opportunity.ghostPost) ? this.state.opportunity.labDescription :
-                                            "No lab info available."}</p>
+                                        <Row>
+                                            <Col>
+                                                <h5> Supervisor!:</h5> <p>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</p>
+                                                <h5> Qualifications:</h5> <p>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</p>
+                                                <h5> Tasks:</h5> <p>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</p>
+                                                <h5> Start Season:</h5>
+                                                <p>{this.state.opportunity.startSeason ? this.state.opportunity.startSeason : "(Season not specified) "} {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}</p>
+                                                <h5> Weekly Hours:</h5> <p>{this.state.opportunity.minHours ? this.state.opportunity.minHours + " " : "No minimum "}
+                                                    - {this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week. </p>
+                                                <h5> Project Description:</h5> <p>{this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}</p>
+                                                {/* <h5>Lab:</h5> */}
+                                                {/*If there's no lab description or it's a ghost post*/}
+                                                <h5>{this.state.opportunity.labDescription && (!this.state.opportunity.ghostPost) ? this.state.opportunity.labDescription :
+                                                    "No lab info available."}</h5>
+                                            </Col>
+                                            <Col>
+                                                <h5>Department</h5>
+                                                <h5>Areas of Interest</h5>
+                                                <h5>Credit Option</h5>
+                                            </Col>
+                                        </Row>
+
                                     </div>
 
 
