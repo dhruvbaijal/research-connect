@@ -35,12 +35,13 @@ class OpportunityList extends Component {
 				 so that value must either be true or false) and if this row has freshman in its array of years allowed, then
 				 we return true and should show this opportunity
 				 */
-				let froshSelected = filteredOptions.yearSelect.Freshman;
-				let sophSelected = filteredOptions.yearSelect.Sophomore;
-				let juniorSelected = filteredOptions.yearSelect.Junior;
-				let seniorSelected = filteredOptions.yearSelect.Senior;
-				let matchingSearches = filteredOptions.matchingSearches;
+				let yearsSelected = Object.keys(filteredOptions.yearSelect).filter(function (k){
+					return filteredOptions.yearSelect[k]
+				});
 				let yearsAllowed = opp.yearsAllowed;
+				console.log(yearsSelected);
+				console.log(yearsAllowed);
+				let matchingSearches = filteredOptions.matchingSearches;
 				let csSelected = filteredOptions.majorSelect.cs;
 				let bioSelected = filteredOptions.majorSelect.biology;
 				let minGPA = filteredOptions.gpaSelect.val;
@@ -62,29 +63,26 @@ class OpportunityList extends Component {
 					}
 				}
 
-				if (!((froshSelected && yearsAllowed.indexOf("freshman") != -1) ||
-					(sophSelected && yearsAllowed.indexOf("sophomore") != -1) ||
-					(juniorSelected && yearsAllowed.indexOf("junior") != -1) ||
-					(seniorSelected && yearsAllowed.indexOf("senior") != -1) ||
-					(!froshSelected && !sophSelected && !juniorSelected && !seniorSelected)))  {
-						willShow = false;
-				}
+				let anyYearFilters = yearsSelected.length == 0;
+				let passedYearFilter = yearsAllowed.filter(function(year) { return yearsSelected.indexOf(year) > -1}).length != 0;
+				willShow = willShow && (anyYearFilters || passedYearFilter);
 
 				/**
 					* Similar to above, checks if the cs box is checked in the majorSelect component (a bunch of major checkboxes)
 					* and also checks to see if this opportunity is in the cs area.
-					* */
+					*
 				if (!((csSelected && opp.areas.indexOf("Computer Science") != -1) ||
 						(bioSelected && opp.areas.indexOf("Biology") != -1) ||
 						(!csSelected && !bioSelected))) {
 							willShow = false;
 				}
+				*/
 
-				if ((minGPA!=null)&&(minGPA < opp.minGPA)){
+				if (minGPA &&(minGPA < opp.minGPA)){
 							willShow = false;
 				}
 
-				if ((season!=null)&&((season!=opp.startSeason) || (year!=opp.startYear))){
+				if (season &&((season!=opp.startSeason) || (year!=opp.startYear))){
 							willShow = false;
 				}
 

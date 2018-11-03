@@ -17,7 +17,7 @@ class CompensationSelect extends React.Component {
 				"Credit": this.credit.checked
 			}
 		}, function () {
-			//call compensationSelect to update the parent's state with the current state of these checkboxes
+			//update parent's state with the current state of the checkboxes (compensationSelect)
 			this.props.updateCompensation(this.state.compensationSelect);
 		});
 	}

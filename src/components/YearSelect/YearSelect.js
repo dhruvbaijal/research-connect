@@ -11,12 +11,13 @@ class YearSelect extends React.Component {
 
 	//when the year is changed, update the state so we can send it to the parent through the updateYear function
 	handleChange(e) {
+		//e.target.name is year associated w/ the event
 		this.setState({
 			yearSelect: {
-				"Freshman": this.freshman.checked,
-				"Sophomore": this.sophomore.checked,
-				"Junior": this.junior.checked,
-				"Senior": this.senior.checked
+				"freshman": this.freshman.checked,
+				"sophomore": this.sophomore.checked,
+				"junior": this.junior.checked,
+				"senior": this.senior.checked
 			}
 		}, function () {
 			//call updateYear to update the parent's state with the current state of these checkboxes
@@ -29,19 +30,19 @@ class YearSelect extends React.Component {
 			<div className="year-select-wrapper">
 				<input ref={(node) => {
 					this.freshman = node
-				}} onChange={this.handleChange.bind(this)} type="checkbox" name="Freshman" value="Freshman"/>Freshman
+				}} onChange={this.handleChange.bind(this)} type="checkbox" name="freshman" value="freshman"/>Freshman
 				<br/>
 				<input ref={(node) => {
 					this.sophomore = node
-				}} onChange={this.handleChange.bind(this)} type="checkbox" name="Sophomore" value="Sophomore"/>Sophomore
+				}} onChange={this.handleChange.bind(this)} type="checkbox" name="sophomore" value="sophomore"/>Sophomore
 				<br/>
 				<input ref={(node) => {
 					this.junior = node
-				}} onChange={this.handleChange.bind(this)} type="checkbox" name="Junior" value="Junior"/>Junior
+				}} onChange={this.handleChange.bind(this)} type="checkbox" name="junior" value="junior"/>Junior
 				<br/>
 				<input ref={(node) => {
 					this.senior = node
-				}} onChange={this.handleChange.bind(this)} type="checkbox" name="Senior" value="Senior"/>Senior
+				}} onChange={this.handleChange.bind(this)} type="checkbox" name="senior" value="senior"/>Senior
 			</div>
 		);
 	}

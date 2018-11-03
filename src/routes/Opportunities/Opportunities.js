@@ -11,6 +11,7 @@ import MajorSelect from '../../components/MajorSelect/MajorSelect';
 import GPASelect from '../../components/GPASelect/GPASelect';
 import StartDate from '../../components/StartDate/StartDate';
 import CompensationSelect from '../../components/CompensationSelect/CompensationSelect';
+import CSAreaSelect from '../../components/CSAreaSelect/CSAreaSelect';
 import DeleteIcon from 'react-icons/lib/ti/delete';
 import SearchIcon from 'react-icons/lib/io/search';
 import * as Utils from "../../components/Utils";
@@ -68,6 +69,10 @@ class Opportunities extends Component {
 
 	handleUpdateCompensation(compensationObj){
 		this.setState({compensationSelect: compensationObj});
+	}
+
+	handleUpdateCSArea(csAreaObject){
+		this.setState({csAreaSelect: csAreaObject});
 	}
 
 	handleUpdateSearch(e) {
@@ -173,6 +178,13 @@ class Opportunities extends Component {
 								<label htmlFor="compensationField">Compensation</label>
 								<CompensationSelect updateCompensation={this.handleUpdateCompensation.bind(this)}/>
 							</div>
+
+							{/*
+							<div className="filter-child">
+								<label htmlFor=CSAreaField>CS Area</label>
+								<CSAreaSelect updateCSArea={this.handleUpdateCSArea.bind(this)}/>
+							</div>
+							*/}
 
 						</div>
 					</div>

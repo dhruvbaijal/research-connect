@@ -9,8 +9,6 @@ import CrossCircle from 'react-icons/lib/fa/minus-circle';
 import * as Utils from '../../components/Utils.js'
 
 //Utils.gradYearToString(2020) == "Sophomore"
-
-
 class OpportunityPage extends Component {
 	constructor(props) {
 		super(props);
@@ -29,16 +27,14 @@ class OpportunityPage extends Component {
 		this.parseMajors = this.parseMajors.bind(this);
 		this.parseYears = this.parseYears.bind(this);
 		this.parseGPA = this.parseGPA.bind(this);
-
 	}
+
 	getId() {
 		// this.props.history.push({pathname: 'opportunity/' + this.props.opId});
 		const url = (window.location.href);
 		const length = url.length;
 		const finURL = url.slice(0, length-1);
 		return (finURL.slice((finURL.lastIndexOf("/")+1)));
-
-
 	}
 
 	isEmpty(obj) {
@@ -99,6 +95,7 @@ class OpportunityPage extends Component {
 
 		// }
 	};
+
 	//this runs before the "render and return ( ... ) " runs. We use it to get data from the backend about the opportunity
 	componentWillMount() {
 		console.log(this.props.match.params.id);
@@ -346,6 +343,7 @@ class OpportunityPage extends Component {
 	}
 
 	render() {
+		console.log(this.state.opportunity);
 		const notProvidedMessage = "Not specified";
 		const isLab = this.state.role !== "undergrad";
 		return (
