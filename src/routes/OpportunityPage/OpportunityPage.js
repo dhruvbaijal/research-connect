@@ -166,21 +166,21 @@ class OpportunityPage extends Component {
                 </div>
             }
             );
-            return <form onSubmit={this.handleAppSubmit.bind(this)}> {questionMapping}
-                {/*Cover Letter: Describe why you{"'"}re interested in this lab/position in particular, as well as how any*/}
-                {/*qualifications you have will help you excel in this lab. Please be concise.*/}
-                {/*<textarea value={this.state.coverLetter} onChange={this.coverChange.bind(this)}*/}
-                {/*className="cover-letter"></textarea>*/}
-                <input className="button" type="submit" value="Submit" />
-            </form>;
 
+            return (
+                <form onSubmit={this.handleAppSubmit.bind(this)}>
+                    {questionMapping}
+                    <div className="submit-button-div">
+                        <input className="button" type="submit" value="Submit" />
+                    </div>
+                </form>
+            );
         } else {
-
-            return <form onSubmit={this.handleAppSubmit.bind(this)}>
-                {/*Cover Letter: Describe why you{"'"}re interested in this lab/position in particular, as well as how any*/}
-                {/*qualifications you have will help you excel in this lab. Please be concise.*/}
-                {/*<textarea value={this.state.coverLetter} onChange={this.coverChange.bind(this)} className="cover-letter"></textarea>*/}
-                <input className="button" type="submit" value="Submit" /></form>;
+            return (
+                <form onSubmit={this.handleAppSubmit.bind(this)}>
+                    <input className="button" type="submit" value="Submit" />
+                </form>
+            );
         }
     }
 
@@ -215,69 +215,74 @@ class OpportunityPage extends Component {
         }
     }
 
-    parseYears(yearsArray) {
+    parseYears(yearsArray, isStudent) {
 
-        let yearDivArray = []; let trackYear = false;
-        if (yearsArray && this.state.student) {
+        let yearDivArray = [];
+        if (yearsArray) {
+            let trackYear = false;
+            if (this.state.student && yearsArray.includes(Utils.gradYearToString(this.state.student.gradYear).toLowerCase())) {
+                console.log(Utils.gradYearToString(this.state.student.gradYear).toLowerCase() + "jii");
 
-
-            if (yearsArray.includes("freshman")) {
-                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Freshman") {
-                    yearDivArray.push(<div key="f"><Check className="greenCheck" /><span key="fresh"> Freshman</span>
-                    </div>)
-                }
-                else if (!yearsArray.includes("sophomore") || !yearsArray.includes("junior") || !yearsArray.includes("senior")) {
-                    yearDivArray.push(<div key="f"><Minus className="cross" /><span key="fresh"> Freshman</span>
-                    </div>)
-                }
+                var s = Utils.gradYearToString(this.state.student.gradYear)
+                yearDivArray.push(<div key="f"><CheckBox className="greenCheck" /><span key="sophomore">   {s}</span>
+                </div>)
                 trackYear = true;
             }
-            if (yearsArray.includes("sophomore")) {
-                if (Utils.gradYearToString(this.state.student.gradYear) === "Sophomore") {
-                    yearDivArray.push(<div key="so"><Check className="greenCheck" /><span > Sophomore</span></div>)
+            else {
+
+                if (yearsArray.includes("freshman")) {
+                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Freshman") {
+
+                    }
+                    else {
+                        yearDivArray.push(<div key="f"><CrossCircle className="cross" /><span key="fresh">   Freshman</span>
+                        </div>)
+                    }
+                    trackYear = true;
                 }
-                else if (!yearsArray.includes("junior") || !yearArray.includes("senior") || yearsArray.includes("sophomore")) {
-                    yearDivArray.push(<div key="so"><Minus className="cross" /><span > Sophomore</span></div>)
+                if (yearsArray.includes("sophomore")) {
+                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Sophomore") {
+
+                    }
+                    else {
+                        yearDivArray.push(<div key="so"><CrossCircle className="cross" /><span >   Sophomore</span></div>)
+                    }
+                    trackYear = true;
                 }
-                trackYear = true;
+                if (yearsArray.includes("junior")) {
+                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Junior") {
+
+                    } else {
+                        yearDivArray.push(<div key="j"><CrossCircle className="cross" /><span >   Junior</span></div>)
+
+                    }
+                    trackYear = true;
+                }
+                if (yearsArray.includes("senior")) {
+                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Senior") {
+
+                    } else {
+                        yearDivArray.push(<div key="se"><CrossCircle className="cross" /><span >   Senior</span></div>)
+
+                    }
+                    trackYear = true;
+                }
+
+
             }
-            if (yearsArray.includes("junior")) {
-                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Junior") {
-                    yearDivArray.push(<div key="j"><Check className="greenCheck" /><span > Junior</span></div>)
-                } else if (!yearsArray.includes("sophomore") && yearsArray.includes("junior")) {
-                    yearDivArray.push(<div key="j"><Minus className="cross" /><span > Junior</span></div>)
-
-                }
-                trackYear = true;
+            if (trackYear) {
+                return <ul>{yearDivArray}</ul>;
             }
-            if (yearsArray.includes("senior")) {
-                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Senior") {
-                    yearDivArray.push(<div key="se"><Check className="greenCheck" /><span > Senior</span></div>)
-                } else if (
-                    Utils.gradYearToString(this.state.student.gradYear) = "Senior") {
-                    yearDivArray.push(<div key="se"><Minus className="cross" /><span > Senior</span></div>)
-
-                }
-                trackYear = true;
+            else {
+                return <ul>
+                    <div key="n"><span> No Preference</span></div>
+                </ul>
             }
-
-
-        }
-
-
-        if (trackYear) {
-            return <ul>{yearDivArray}</ul>;
-        }
-        else {
-            return <ul>
-                <div key="n"><span> No Preference</span></div>
-            </ul>
         }
 
     }
 
-
-    parseMajors(arrayIn) {
+    parseMajors(arrayIn, isStudent) {
         let returnArray = [];
         if (arrayIn) {
             if (arrayIn.length === 0) {
@@ -286,10 +291,10 @@ class OpportunityPage extends Component {
             }
             for (let i = 0; i < arrayIn.length; i++) {
                 if (this.state.student != null && this.state.student.major.indexOf(arrayIn[i]) != -1) {
-                    returnArray.push(<div key={i}><Check color='blue' name='users' /><span > {arrayIn[i]}</span></div>);
+                    returnArray.push(<div key={i}><CheckBox className="greenCheck" /><span > {arrayIn[i]}</span></div>);
                 }
                 else {
-                    returnArray.push(<div key={i}><Minus className="cross" /><span > {arrayIn[i]}</span></div>);
+                    returnArray.push(<div key={i}><CrossCircle className="cross" /><span > {arrayIn[i]}</span></div>);
 
                 }
             }
@@ -297,7 +302,7 @@ class OpportunityPage extends Component {
         }
     }
 
-    parseClasses(arrayIn) {
+    parseClasses(arrayIn, isStudent) {
         let returnArray = []
         if (arrayIn) {
             if (arrayIn.length === 0) {
@@ -306,23 +311,29 @@ class OpportunityPage extends Component {
             }
             for (let i = 0; i < arrayIn.length; i++) {
                 if (this.state.student != null && this.state.student.courses.indexOf(arrayIn[i]) != -1) {
-                    returnArray.push(<div key={i}><span> {arrayIn[i]}</span></div>);
+                    returnArray.push(<div key={i}><CheckBox className="greenCheck" /><span> {arrayIn[i]}</span></div>);
                 }
                 else {
-                    returnArray.push(<div key={i}><Minus className="cross" /><span> {arrayIn[i]}</span></div>);
+                    returnArray.push(<div key={i}><CrossCircle className="cross" /><span> {arrayIn[i]}</span></div>);
                 }
             }
             return <ul>{returnArray}</ul>;
         }
     }
 
-    parseGPA(gpa) {
+    parseGPA(gpa, isStudent) {
         //if minGPA is falsy or falls in range
         if (!this.state.minGPA || (this.state.student && this.state.opportunity && this.state.opportunity.minGPA <= this.state.student.gpa)) {
-            return <p key={0}><span> {this.state.opportunity.minGPA ? this.state.opportunity.minGPA : "No Preference"}</span></p>;
+            if (this.state.opportunity.minGPA) {
+                return <p key={0}> <CheckBox className="greenCheck" /><span> {this.state.opportunity.minGPA}</span></p>;
+            }
+            else {
+                return <p key={0}> <span>  No Preference</span></p>;
+            }
+            // <CheckBox className="greenCheck" /><span> {this.state.opportunity.minGPA ? this.state.opportunity.minGPA : "No Preference"}</span></p>;
         }
         else {
-            return <p key={1}><Minus className="cross" /><span> {this.state.opportunity.minGPA}</span></p>;
+            return <p key={1}><CrossCircle className="cross" /><span> {this.state.opportunity.minGPA}</span></p>;
         }
 
     }
@@ -348,202 +359,133 @@ class OpportunityPage extends Component {
 
     render() {
         const notProvidedMessage = "Not specified";
-        if (this.state.role != "undergrad") {
-            return (
-                <div>
-                    {this.state.role === "undergrad" ? <Navbar /> : <ProfessorNavbar />}
-                    <div className="opportunities-page-wrapper">
-                        <div className="cover-photo"></div>
-                        <div className="container opportunityListing">
-                            <div class="top">
-                                <div className="row first-row">
-
-                                    <div className="title-container column column-65">
-                                        <div className="title-box">
-                                            <div className="title-first-col ">
-                                                <h4>{this.state.opportunity.title}</h4>
-                                                <h6> Lab: {this.state.opportunity.labName}</h6>
-                                                <h6> Professor: {this.state.opportunity.pi}</h6>
-                                            </div>
-                                            <div className="title-second-col">
-                                                <a className="button" href={"/EditOpp?Id=" + this.getId() + "/"}>Edit Opportunity</a>
-
-                                            </div>
-                                        </div>
-                                        <div className="about-box">
-                                            <div className="title-first-col ">
-                                                <h5> Supervisor!!:</h5> <p>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</p>
-                                                <h5> Qualifications:</h5> <p>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</p>
-                                                <h5> Tasks:</h5> <p>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</p>
-                                                <h5> Start Season:</h5>
-                                                <p>{this.state.opportunity.startSeason ? this.state.opportunity.startSeason : "(Season not specified) "} {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}</p>
-                                                <h5> Weekly Hours:</h5> <p>{this.state.opportunity.minHours ? this.state.opportunity.minHours + " " : "No minimum "}
-                                                    - {this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week. </p>
-                                                <h5> Project Description:</h5> <p>{this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}</p>
-                                                <h5>Lab:</h5>
-                                                {/*<a href={this.state.opportunity.labPage}>{this.state.opportunity.labName}</a>*/}
-                                                <p>{this.state.opportunity.labDescription}</p>
-                                            </div>
-                                            <div className="title-second-col">
-                                                <h5>Department</h5>
-                                                <h5>Areas of Interest</h5>
-                                                <h5>Credit Option</h5>
-                                            </div>
-
-
-
-                                        </div>
-                                    </div>
+        const isLab = this.state.role !== "undergrad";
+        return (
+            <div>
+                {this.state.role === "undergrad" ? <Navbar /> : <ProfessorNavbar />}
+                <div className={'opportunities-page-wrapper ' + (isLab ? 'opportunity-lab' : '')}>
+                    <div className="wallpaper"></div>
+                    <div className="row opportunity-row">
+                        <div className="column opp-details-column">
+                            <div className="row opp-title-card">
+                                <div className="column left-column">
+                                    <div className="header">{this.state.opportunity.title}</div>
+                                    <div>{this.state.opportunity.labName}</div>
                                 </div>
-
-                                <div className="column column-25 qualifications">
-                                    <div className="qual-title">
-                                        <h5 > Preferred Qualifications</h5>
-
-                                    </div>
-                                    <hr />
-
-                                    <div className="qual-section">
-                                        <h6>Year: </h6>
-                                        {this.parseYears(this.state.opportunity.yearsAllowed)}
-                                    </div>
-                                    <hr />
-                                    <div className="qual-section">
-                                        <h6> Major:</h6>
-                                        {this.parseMajors(this.state.opportunity.majorsAllowed)}
-                                    </div>
-                                    <hr />
-                                    <div className="qual-section">
-                                        <h6>GPA: </h6>
-                                        {this.parseGPA(this.state.opportunity.minGPA)}
-                                    </div>
-                                    <hr />
-                                    <div className="qual-section">
-                                        <h6>Courses: </h6>
-                                        {this.parseClasses(this.state.opportunity.requiredClasses)}
-                                    </div>
-
-
+                                <div className="column right-column">
+                                    {isLab &&
+                                        <a className="button" href={"/EditOpp?Id=" + this.getId() + "/"}>Edit Opportunity</a>
+                                    }
+                                    {!isLab &&
+                                        <a className="button" href="#Application">Apply</a>
+                                        /* { this.state.opportunity.ghostPost ? ": Rolling Admission" : this.convertDate(this.state.opportunity.closes) } */
+                                    }
                                 </div>
-
                             </div>
-
-
-                        </div>
-                    </div>
-
-                </div>
-            );
-
-        }
-        else {
-            return (
-                <div>
-                    {this.state.role === "undergrad" ? <Navbar /> : <ProfessorNavbar />}
-                    <div className="opportunities-page-wrapper">
-                        <div className="cover-photo"></div>
-                        <div className="container opportunityListing">
-                            <div className="row first-row">
-
-                                <div className="title-container column column-65">
-                                    <div className="title-box">
-                                        <div className="title-first-col ">
-                                            <h4>{this.state.opportunity.title}</h4>
-                                            {this.state.opportunity.ghostPost ? "" : <h6> Lab: {this.state.opportunity.labName}</h6>}
-                                            {/*<h6> Professor: {this.state.opportunity.pi}</h6>*/}
-                                        </div>
-                                        <div className="title-second-col">
-                                            <a className="apply-button button" href="#Application">Apply</a>
-                                            <h6> Applications Due {
-                                                this.state.opportunity.ghostPost ? ": Rolling Admission" : this.convertDate(this.state.opportunity.closes)
-                                            }</h6>
-                                            {/*this.checkOpen()*/}
-
+                            <div className="row">
+                                <div className="opp-details-card">
+                                    <div className="opp-details-section">
+                                        <div className="header">Supervisor</div>
+                                        <div>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</div>
+                                    </div>
+                                    <div className="opp-details-section">
+                                        <div className="header">Qualifications</div>
+                                        <div>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</div>
+                                    </div>
+                                    <div className="opp-details-section">
+                                        <div className="header">Tasks</div>
+                                        <div>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</div>
+                                    </div>
+                                    <div className="opp-details-section">
+                                        <div className="header">Start Season</div>
+                                        <div>
+                                            {this.state.opportunity.startSeason ? this.state.opportunity.startSeason + " " : "(Season not specified) "}
+                                            {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}
                                         </div>
                                     </div>
-                                    <div className="about-box">
-                                        <Row>
-                                            <Col>
-                                                <h5> Supervisor!:</h5> <p>{this.state.opportunity.supervisor ? this.state.opportunity.supervisor : notProvidedMessage}</p>
-                                                <h5> Qualifications:</h5> <p>{this.state.opportunity.qualifications ? this.state.opportunity.qualifications : notProvidedMessage}</p>
-                                                <h5> Tasks:</h5> <p>{this.state.opportunity.undergradTasks ? this.state.opportunity.undergradTasks : notProvidedMessage}</p>
-                                                <h5> Start Season:</h5>
-                                                <p>{this.state.opportunity.startSeason ? this.state.opportunity.startSeason : "(Season not specified) "} {this.state.opportunity.startYear ? this.state.opportunity.startYear : "(Year not specified)"}</p>
-                                                <h5> Weekly Hours:</h5> <p>{this.state.opportunity.minHours ? this.state.opportunity.minHours + " " : "No minimum "}
-                                                    - {this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week. </p>
-                                                <h5> Project Description:</h5> <p>{this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}</p>
-                                                {/* <h5>Lab:</h5> */}
-                                                {/*If there's no lab description or it's a ghost post*/}
-                                                <h5>{this.state.opportunity.labDescription && (!this.state.opportunity.ghostPost) ? this.state.opportunity.labDescription :
-                                                    "No lab info available."}</h5>
-                                            </Col>
-                                            <Col>
-                                                <h5>Department</h5>
-                                                <h5>Areas of Interest</h5>
-                                                <h5>Credit Option</h5>
-                                            </Col>
-                                        </Row>
-
+                                    <div className="opp-details-section">
+                                        <div className="header">Weekly Hours</div>
+                                        <div>
+                                            {this.state.opportunity.minHours ? this.state.opportunity.minHours : "No minimum"}-
+											{this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week.
+										</div>
                                     </div>
-
-
-                                    <div id="Application" className="application-box">
-                                        <h4>Apply Here: </h4>
-                                        {this.state.opportunity.ghostPost ? <div> Please email {this.state.opportunity.ghostEmail + " "}
-                                            with your resume and why you're interested in order to apply. You do not need to take
-                                        any action here.</div> : <div>
+                                    <div className="opp-details-section">
+                                        <div className="header">Project Description</div>
+                                        <div>
+                                            {this.state.opportunity.projectDescription ? this.state.opportunity.projectDescription : notProvidedMessage}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {
+                                !isLab &&
+                                <div id="Application" className="row opp-application-box">
+                                    <div className="column">
+                                        <div className="header">Apply Here</div>
+                                        {this.state.opportunity.ghostPost ?
+                                            <div>
+                                                Please email {this.state.opportunity.ghostEmail + " "}
+                                                with your resume and why you're interested in order to apply. You do not need to take
+                                                any action here.
+										</div> :
+                                            <div>
                                                 <div className="error-div">
-                                                    {this.state.triedSubmitting && !this.state.submitted ?
-                                                        <p className="app-error-message">Please answer all questions in order to
-                                                submit.</p> : ''}
+                                                    {
+                                                        this.state.triedSubmitting && !this.state.submitted ?
+                                                            <p className="app-error-message">Please answer all questions in order to submit.</p> : ''
+                                                    }
                                                 </div>
-                                                {!this.state.submitted ? this.printQuestions() :
-                                                    <p>You have applied to this position.</p>}
+                                                {
+                                                    !this.state.submitted ? this.printQuestions() :
+                                                        <p>You have applied to this position.</p>
+                                                }
                                             </div>
                                         }
                                     </div>
                                 </div>
-
-                                <div className="column column-25 qualifications">
-                                    <div className="qual-title">
-                                        <h5 > Preferred Qualifications</h5>
-
-                                    </div>
-                                    <hr />
-
-                                    <div className="qual-section">
-                                        <h6>Year: </h6>
-                                        {this.parseYears(this.state.opportunity.yearsAllowed)}
-                                    </div>
-                                    <hr />
-                                    <div className="qual-section">
-                                        <h6> Major:</h6>
-                                        {this.parseMajors(this.state.opportunity.majorsAllowed)}
-                                    </div>
-                                    <hr />
-                                    <div className="qual-section">
-                                        <h6>GPA: </h6>
-                                        {this.parseGPA(this.state.opportunity.minGPA)}
-                                    </div>
-                                    <hr />
-                                    <div className="qual-section">
-                                        <h6>Courses: </h6>
-                                        {this.parseClasses(this.state.opportunity.requiredClasses)}
-                                    </div>
-
-
+                            }
+                        </div>
+                        <div className="column">
+                            <div className="opp-qualifications">
+                                <div className="opp-qual-title">
+                                    <div>Preferred Qualifications</div>
                                 </div>
 
+                                <hr />
+
+                                <div className="opp-qual-section">
+                                    <h6 className="header">Year</h6>
+                                    {this.parseYears(this.state.opportunity.yearsAllowed)}
+                                </div>
+
+                                <hr />
+
+                                <div className="opp-qual-section">
+                                    <h6 className="header">Major</h6>
+                                    {this.parseMajors(this.state.opportunity.majorsAllowed)}
+                                </div>
+
+                                <hr />
+
+                                <div className="opp-qual-section">
+                                    <h6 className="header">GPA</h6>
+                                    {this.parseGPA(this.state.opportunity.minGPA)}
+                                </div>
+
+                                <hr />
+
+                                <div className="opp-qual-section">
+                                    <h6 className="header">Courses</h6>
+                                    {this.parseClasses(this.state.opportunity.requiredClasses)}
+                                </div>
                             </div>
-
-
                         </div>
                     </div>
-
                 </div>
-            );
-
-        }
+                <Footer />
+            </div>
+        );
     }
 }
 

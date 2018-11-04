@@ -84,7 +84,7 @@ app.get('/', function (req, res) {
         verify(token, function (undergradNetId) {
             debug("here! " + undergradNetId);
             //find the undergrad so we can get their info to determine the "preqreqs match" field
-            undergradModel.findOne({netId: undergradNetId}, function (err, undergrad) {
+            undergradModel.findOne({ netId: undergradNetId }, function (err, undergrad) {
                 let undergrad1 = undergrad;
                 //if they're a lab admin, show all the opportunites and set all prereqsMatch to true
                 if (undergrad1 === undefined || undergrad1 === null) {
@@ -168,7 +168,7 @@ app.get('/', function (req, res) {
                                 debug("h");
                                 let thisLab = findLabWithAdmin(labs, opportunities[i].creatorNetId);
                                 //prevent "undefined" values if there's some error
-                                if (thisLab === undefined) thisLab = {name: "", labPage: "", labDescription: ""};
+                                if (thisLab === undefined) thisLab = { name: "", labPage: "", labDescription: "" };
                                 opportunities[i]["prereqsMatch"] = prereqsMatch;
                                 opportunities[i]["labName"] = thisLab.name;
                                 opportunities[i]["labPage"] = thisLab.labPage;
@@ -242,13 +242,14 @@ app.post('/', function (req, res) {
     debug("minGPA: " + data.minGPA);
     debug("minHours: " + data.minHours);
     debug("maxHours: " + data.maxHours);
+    debug("additionalInformation: " + data.additionalInformation);
     debug("opens: " + data.opens);
     debug("closes: " + data.closes);
     debug("areas: " + data.areas);
     let maxHours;
     data.minHours = parseInt(data.minHours);
     debug(data.minHours);
-    if (isNaN(data.minHours)){
+    if (isNaN(data.minHours)) {
         data.minHours = 0;
     }
     if (data.maxHours) {
@@ -257,11 +258,11 @@ app.post('/', function (req, res) {
     else {
         maxHours = data.minHours + 10;
     }
-    if (maxHours < data.minHours){
+    if (maxHours < data.minHours) {
         data.minHours = 0;
         maxHours = 10;
     }
-    if (data.yearsAllowed && data.yearsAllowed.length === 0){
+    if (data.yearsAllowed && data.yearsAllowed.length === 0) {
         data.yearsAllowed = ["freshman", "sophomore", "junior", "senior"];
     }
     debug("1");
@@ -329,6 +330,7 @@ app.post('/', function (req, res) {
             minGPA: data.minGPA,
             minHours: data.minHours,
             maxHours: maxHours,
+            additionalInformation: data.additionalInformation,
             opens: data.opens,
             closes: data.closes,
             areas: data.areas,
@@ -338,12 +340,12 @@ app.post('/', function (req, res) {
         opportunity.save(function (err, response) {
             if (err) {
                 debug(err);
-                res.status(500).send({"errors": err.errors});
+                res.status(500).send({ "errors": err.errors });
                 return;
             }
             let oppId = response.id;
             labModel.findOne(
-                {labAdmins: netIdActual}
+                { labAdmins: netIdActual }
                 , function (error, lab) {
                     let opps = lab.opportunities;
                     opps.push(mongoose.Types.ObjectId(oppId));
@@ -356,12 +358,12 @@ app.post('/', function (req, res) {
 
         let opportunityMajor = req.body.majorsAllowed;
         undergradModel.find({
-                $or: [
-                    {major: opportunityMajor},
-                    {secondMajor: opportunityMajor},
-                    {minor: opportunityMajor}
-                ]
-            },
+            $or: [
+                { major: opportunityMajor },
+                { secondMajor: opportunityMajor },
+                { minor: opportunityMajor }
+            ]
+        },
             function (err, studentsWhoMatch) {
                 for (let undergrad1 in studentsWhoMatch) {
                     const msg = {
@@ -373,12 +375,12 @@ app.post('/', function (req, res) {
                         replyTo: "acb352@cornell.edu",
                         subject: 'New Research Opportunity Available!',
                         html: 'Hi,<br />' +
-                        'A new opportunity was just posted in an area you expressed interest in. You can apply to it here: http://research-connect.com/opportunity/' + opportunity._id + '<br />' +
-                        '<br />' +
-                        'Thanks,<br />' +
-                        'The Research Connect Team<br />'
+                            'A new opportunity was just posted in an area you expressed interest in. You can apply to it ' +
+                            'under "opportunities" on the Research-Connnect.com website! <br />' +
+                            '<br />' +
+                            'Thanks,<br />' +
+                            'The Research Connect Team<br />'
                     };
-
                     sgMail.send(msg);
                 }
                 debug("finished emailling students");
@@ -417,6 +419,7 @@ app.put('/:id', function (req, res) {
             opportunity.minGPA = req.body.minGPA || opportunity.minGPA;
             opportunity.minHours = req.body.minHours || opportunity.minHours;
             opportunity.maxHours = req.body.maxHours || opportunity.maxHours;
+            opportunity.additionalInformation = req.body.additionalInformation || opportunity.additionalInformation;
             opportunity.opens = req.body.opens || opportunity.opens;
             opportunity.closes = req.body.closes || opportunity.closes;
             opportunity.areas = req.body.areas || opportunity.areas;
@@ -438,7 +441,7 @@ app.put('/:id', function (req, res) {
 });
 app.get('/search', function (req, res) {
     debug(req.query.search);
-    opportunityModel.find({$text: {$search: req.query.search}}, '_id', function (err, search) {
+    opportunityModel.find({ $text: { $search: req.query.search } }, '_id', function (err, search) {
         if (err) {
             debug(err);
             res.send(err);
@@ -510,14 +513,14 @@ app.get('/:id', function (req, res) {
                 labAdministratorModel.findOne(
                     {
                         $and: [
-                            {netId: {$in: labAdmins}},
-                            {role: {$in: ["pi", "postdoc", "grad", "staffscientist", "labtech"]}}
+                            { netId: { $in: labAdmins } },
+                            { role: { $in: ["pi", "postdoc", "grad", "staffscientist", "labtech"] } }
                         ]
                     },
                     function (err, labAdmin) {
                         debug(labAdmin);
                         opportunity.pi = labAdmin.firstName + " " + labAdmin.lastName;
-                        undergradModel.findOne({netId: tokenNetId}, function (error3, student) {
+                        undergradModel.findOne({ netId: tokenNetId }, function (error3, student) {
                             if (student === undefined) {
                                 opportunity.student = {
                                     "firstName": "rachel",
