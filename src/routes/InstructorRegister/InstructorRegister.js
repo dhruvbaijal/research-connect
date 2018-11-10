@@ -37,7 +37,8 @@ class InstructorRegister extends React.Component {
             piValid: false,
             triedSubmitting: false,
             buttonDisabled: false, 
-            buttonValue: "Register", 
+            buttonValue: "Register",
+            selectedOption: null 
         };
 
 
@@ -50,7 +51,7 @@ class InstructorRegister extends React.Component {
        let arrayOfLabs = [];
     
        for (let i = 0; i < this.state.data.length; i++) {
-         arrayOfLabs.push({label:this.state.data[i].name, value: this.state.data[i].id});
+         arrayOfLabs.push({label:this.state.data[i].name, value: this.state.data[i]._id});
     
        }
       return arrayOfLabs;
@@ -79,7 +80,7 @@ class InstructorRegister extends React.Component {
 
         }
     }
-
+ 
 
     loadOpportunitiesFromServer() {
 
@@ -181,6 +182,17 @@ class InstructorRegister extends React.Component {
             this.setState({piValid: false});
         }
     }
+    handleChange = (selectedOption) => {
+        if (selectedOption != ""){
+            this.setState({ selectedOption });
+            this.setState({labName: selectedOption.label});
+            this.setState({labId: selectedOption.value});
+            this.setState({labNameValid: true});
+        }
+        console.log(`Option selected:`, selectedOption);
+      }
+
+       
 
     suggestionsClicked(event) {
         event.preventDefault();
@@ -230,7 +242,7 @@ class InstructorRegister extends React.Component {
     };
 
     render() {
-
+        const { selectedOption } = this.state;
         return (
             <div>
                 {/*<Navbar/>*/}
@@ -305,8 +317,8 @@ class InstructorRegister extends React.Component {
                                     </div>
                                     <div className="auto-div">
                                         <Select className="left-input"
-                                            value = {this.handleUpdateLab.bind(this)}
-                                             onChange={this.handleUpdateLab.bind(this)}
+                                            value = {selectedOption}
+                                             onChange={this.handleChange}
                                              options={this.displayLabs(this.state.data)}
                                         />
                                         {!this.state.labNameValid && this.state.triedSubmitting ?
