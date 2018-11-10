@@ -1,6 +1,6 @@
 let express = require('express');
 let app = express.Router();
-let {undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken, s3, mongoose, verify, handleVerifyError} = require('../common.js');
+let { undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken, s3, mongoose, verify, handleVerifyError } = require('../common.js');
 let common = require('../common.js');
 const BUCKET_NAME = process.env.BUCKET_NAME;
 
@@ -30,7 +30,7 @@ app.get('/:id', function (req, res) {
                 return res.send(baseString);
             }
         });
-    }).catch(function(){
+    }).catch(function () {
         res.status(403).send("You are unauthorized to access this document.");
     });
 });
@@ -42,15 +42,19 @@ function generateId() {
 //Only used to store resume and transcript, looks for req.body.resume or req.body.transcript.
 app.post('/', function (req, res) {
     debug('reached');
-    verify(req.body.token_id, function(email){
-        debug("email: " + email);
-        if (email === null){
+    console.log("reach");
+    console.log(req.body);
+    //sessionStorage.getItem('token_id')
+
+    verify(req.body.token_id, function (email) {
+        console.log("email: " + email);
+        if (email === null) {
             return res.status(412).send("No user found with current session token.");
         }
         debug("net id:");
         let netId = common.getNetIdFromEmail(email);
         debug(netId);
-        if (!netId){
+        if (!netId) {
             return res.status(412).send("The email you signed up with does not end in @cornell.edu. Please log out and try again.");
         }
         let resume = req.body.resume;
@@ -63,10 +67,14 @@ app.post('/', function (req, res) {
         if (resume === undefined || resume === null) {
             let transcript = req.body.transcript;
             if (transcript === undefined || transcript === null) {
+                console.log("no files ");
                 res.status(400).send("No files submitted");
             }
             else {
+                console.log("yes files ");
+
                 transcript = transcript[0];
+                console.log("transcript " + transcript);
                 /** MLAB STORAGE
                  let transcriptObj = new docModel();
                  transcriptObj.doc = transcript;
@@ -93,15 +101,16 @@ app.post('/', function (req, res) {
                     }
                 });
                 //if this doessn't work, use update operators for the second param: https://docs.mongodb.com/manual/reference/operator/update/
-                undergradModel.findOneAndUpdate({"netId": netId}, {$set: {transcriptId: docId}}, function (err, oldDoc) {
+                undergradModel.findOneAndUpdate({ "netId": netId }, { $set: { transcriptId: docId } }, function (err, oldDoc) {
                     debug("trans error: " + err);
                 });
             }
         }
         //resume is defined
         else {
-            debug("resume uploaded");
+            console.log("resume uploaded");
             resume = resume[0];
+            console.log(resume);
             debug(resume);
             /** MLAB STORAGE
              let resumeObj = new docModel();
@@ -118,6 +127,7 @@ app.post('/', function (req, res) {
                 ContentEncoding: 'base64',
                 ContentType: 'text/plain',
                 Body: resume
+                
             };
             debug("upload params");
             debug(uploadParams);
@@ -129,12 +139,12 @@ app.post('/', function (req, res) {
                 }
                 if (data) {
                     debug("Upload Success", data.Location);
-                    undergradModel.findOneAndUpdate({"netId": netId}, {$set: {resumeId: docId}}, function (err, oldDoc) {
+                    undergradModel.findOneAndUpdate({ "netId": netId }, { $set: { resumeId: docId } }, function (err, oldDoc) {
                         debug("resume error: " + err);
-                        if (!err){
+                        if (!err) {
                             res.status(200).send();
                         }
-                        else{
+                        else {
                             debug("error in find  one and update");
                             debug(err);
                             res.status(500).send(err);
@@ -144,10 +154,10 @@ app.post('/', function (req, res) {
             });
             debug('gend');
         }
-    }, true).catch(function(error){
+    }, true).catch(function (error) {
         debug("error in post doc/");
         debug(error);
-        if (!handleVerifyError(error, res)){
+        if (!handleVerifyError(error, res)) {
             res.status(500).send("Error in submitting your doc. Please try again");
         }
     })

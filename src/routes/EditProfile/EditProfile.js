@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Navbar from '../../components/Navbars/StudentNavbar/StudentNavbar'
 import Footer from '../../components/Footer/Footer';
 import './EditProfile.scss';
@@ -70,16 +70,16 @@ class EditProfile extends Component {
                 console.log("info");
                 console.log(info);
                 let skills = info.skills === undefined ? [] : info.skills;
-                this.setState({firstName: info.firstName});
-                this.setState({lastName: info.lastName});
-                this.setState({year: this.gradYearToYear(info.gradYear)});
-                this.setState({major: info.major})
-                this.setState({gpa: info.gpa});
-                this.setState({relevantCourses: info.courses});
-                this.setState({relevantSkills: skills});
-                this.setState({netId: info.netId});
-                this.setState({resumeId: info.resumeId});
-                this.setState({transcriptId: info.transcriptId});
+                this.setState({ firstName: info.firstName });
+                this.setState({ lastName: info.lastName });
+                this.setState({ year: this.gradYearToYear(info.gradYear) });
+                this.setState({ major: info.major })
+                this.setState({ gpa: info.gpa });
+                this.setState({ relevantCourses: info.courses });
+                this.setState({ relevantSkills: skills });
+                this.setState({ netId: info.netId });
+                this.setState({ resumeId: info.resumeId });
+                this.setState({ transcriptId: info.transcriptId });
                 console.log(this.state.firstName);
                 console.log(info);
                 if (this.state.firstName == '') {
@@ -88,8 +88,8 @@ class EditProfile extends Component {
                     console.log("We did load it :D");
                 }
             }).catch(function (error) {
-            Utils.handleTokenError(error);
-        });
+                Utils.handleTokenError(error);
+            });
         ;
     }
 
@@ -100,58 +100,58 @@ class EditProfile extends Component {
 
     handleChange(event) {
         if (event.target.id === "year") {
-            this.setState({year: event.target.value});
+            this.setState({ year: event.target.value });
         }
         else if (event.target.id === "major") {
-            this.setState({major: event.target.value});
+            this.setState({ major: event.target.value });
         }
         else if (event.target.id === "gpa") {
-            this.setState({gpa: event.target.value});
+            this.setState({ gpa: event.target.value });
         }
         else if (event.target.id === "new-course") {
-            this.setState({newCourse: event.target.value});
+            this.setState({ newCourse: event.target.value });
         }
         else if (event.target.id === "new-skill") {
-            this.setState({newSkill: event.target.value});
+            this.setState({ newSkill: event.target.value });
         }
     }
 
     handleEditYear(event) {
         let validateYear = ["Freshman", "Sophomore", "Junior", "Senior"]
         if (validateYear.indexOf(this.state.year) === -1) {
-            this.setState({invalidYear: true});
+            this.setState({ invalidYear: true });
         } else {
-            this.setState({invalidYear: false});
-            this.setState({editYear: !this.state.editYear});
+            this.setState({ invalidYear: false });
+            this.setState({ editYear: !this.state.editYear });
         }
 
     }
 
     handleEditMajor(event) {
         if (this.state.major == "") {
-            this.setState({invalidMajor: true});
+            this.setState({ invalidMajor: true });
         } else {
-            this.setState({invalidMajor: false});
-            this.setState({editMajor: !this.state.editMajor});
+            this.setState({ invalidMajor: false });
+            this.setState({ editMajor: !this.state.editMajor });
         }
 
     }
 
     handleEditGPA(event) {
         if (this.state.gpa == "") {
-            this.setState({invalidGPA: true});
+            this.setState({ invalidGPA: true });
         } else {
-            this.setState({invalidGPA: false});
-            this.setState({editGPA: !this.state.editGPA});
+            this.setState({ invalidGPA: false });
+            this.setState({ editGPA: !this.state.editGPA });
         }
     }
 
     handleEditSkills(event) {
-        this.setState({editSkills: !this.state.editSkills});
+        this.setState({ editSkills: !this.state.editSkills });
     }
 
     handleEditCourses(event) {
-        this.setState({editCourses: !this.state.editCourses});
+        this.setState({ editCourses: !this.state.editCourses });
     }
 
     handleDeleteCourse(data, e) {
@@ -159,7 +159,7 @@ class EditProfile extends Component {
         let index = currentCourses.indexOf(data);
         currentCourses.splice(index, 1);
 
-        this.setState({relevantCourses: currentCourses});
+        this.setState({ relevantCourses: currentCourses });
 
     }
 
@@ -167,8 +167,8 @@ class EditProfile extends Component {
         if (this.state.newCourse != "") {
             let currentCourses = this.state.relevantCourses;
             currentCourses.push(this.state.newCourse);
-            this.setState({relevantCourses: currentCourses});
-            this.setState({newCourse: ""});
+            this.setState({ relevantCourses: currentCourses });
+            this.setState({ newCourse: "" });
         }
     }
 
@@ -177,15 +177,15 @@ class EditProfile extends Component {
         let index = currentSkills.indexOf(data);
         currentSkills.splice(index, 1);
 
-        this.setState({relevantSkills: currentSkills});
+        this.setState({ relevantSkills: currentSkills });
     }
 
     addSkill() {
         if (this.state.newSkill != "") {
             let currentSkills = this.state.relevantSkills;
             currentSkills.push(this.state.newSkill);
-            this.setState({relevantSkills: currentSkills});
-            this.setState({newSkill: ""});
+            this.setState({ relevantSkills: currentSkills });
+            this.setState({ newSkill: "" });
         }
     }
 
@@ -194,25 +194,25 @@ class EditProfile extends Component {
         if (this.state.editCourses) {
             for (let i = 0; i < this.state.relevantCourses.length; i++) {
                 list.push(<div key={i} className="edit-container">
-                        <div className="editting">
-                            <p className="course editting"
-                               key={this.state.relevantCourses[i] + "edit"}>{this.state.relevantCourses[i]}</p>
-                            <Delete size={30} id={this.state.relevantCourses[i]}
-                                    onClick={this.handleDeleteCourse.bind(this, this.state.relevantCourses[i])}
-                                    className="delete-icon"/>
-                        </div>
+                    <div className="editting">
+                        <p className="course editting"
+                            key={this.state.relevantCourses[i] + "edit"}>{this.state.relevantCourses[i]}</p>
+                        <Delete size={30} id={this.state.relevantCourses[i]}
+                            onClick={this.handleDeleteCourse.bind(this, this.state.relevantCourses[i])}
+                            className="delete-icon" />
                     </div>
+                </div>
                 );
             }
             return <div className="display-list">{list}
                 <input className="addTag" onChange={this.handleChange.bind(this)} id="new-course" type="text"
-                       name="new-course" key="new-course" placeholder="Add Course" value={this.state.newCourse}/>
-                <Add className="add-icon" value={this.state.newCourse} size={22} onClick={this.addCourse.bind(this)}/>
+                    name="new-course" key="new-course" placeholder="Add Course" value={this.state.newCourse} />
+                <Add className="add-icon" value={this.state.newCourse} size={22} onClick={this.addCourse.bind(this)} />
             </div>;
         } else {
             for (let i = 0; i < this.state.relevantCourses.length; i++) {
                 list.push(<p className="display-list-item course"
-                             key={this.state.relevantCourses[i]}>{this.state.relevantCourses[i]}</p>);
+                    key={this.state.relevantCourses[i]}>{this.state.relevantCourses[i]}</p>);
             }
             return <div className="display-list">{list}</div>;
         }
@@ -223,26 +223,26 @@ class EditProfile extends Component {
         if (this.state.editSkills) {
             for (let i = 0; i < this.state.relevantSkills.length; i++) {
                 list.push(<div key={i} className="edit-container">
-                        <div className="editting">
-                            <p className="skill editting"
-                               key={this.state.relevantSkills[i] + "edit"}>{this.state.relevantSkills[i]}</p>
-                            <Delete size={30} id={this.state.relevantSkills[i]}
-                                    onClick={this.handleDeleteSkill.bind(this, this.state.relevantSkills[i])}
-                                    className="delete-icon"/>
-                        </div>
+                    <div className="editting">
+                        <p className="skill editting"
+                            key={this.state.relevantSkills[i] + "edit"}>{this.state.relevantSkills[i]}</p>
+                        <Delete size={30} id={this.state.relevantSkills[i]}
+                            onClick={this.handleDeleteSkill.bind(this, this.state.relevantSkills[i])}
+                            className="delete-icon" />
                     </div>
+                </div>
                 );
             }
             return <div className="display-list">{list}
                 <input className="addTag" onChange={this.handleChange.bind(this)} id="new-skill" type="text"
-                       name="new-skill" key="new-skill" placeholder="Add Skill" value={this.state.newSkill}/>
-                <Add className="add-icon" value={this.state.newSkill} size={22} onClick={this.addSkill.bind(this)}/>
+                    name="new-skill" key="new-skill" placeholder="Add Skill" value={this.state.newSkill} />
+                <Add className="add-icon" value={this.state.newSkill} size={22} onClick={this.addSkill.bind(this)} />
             </div>;
         }
         else {
             for (let i = 0; i < this.state.relevantSkills.length; i++) {
                 list.push(<p className="display-list-item skill"
-                             key={this.state.relevantSkills[i]}>{this.state.relevantSkills[i]}</p>);
+                    key={this.state.relevantSkills[i]}>{this.state.relevantSkills[i]}</p>);
             }
             return <div className="display-list">{list}</div>;
         }
@@ -267,8 +267,8 @@ class EditProfile extends Component {
                 let fileAsBinaryString = reader.result;
                 let encodedData = window.btoa(fileAsBinaryString);
                 // do whatever you want with the file content
-                this.setState({resume: file})
-                this.setState({resumeValid: true})
+                this.setState({ resume: file })
+                this.setState({ resumeValid: true })
             };
             reader.onabort = () => console.log('file reading was aborted');
             reader.onerror = () => console.log('file reading has failed');
@@ -286,7 +286,7 @@ class EditProfile extends Component {
                 let fileAsBinaryString = reader.result;
                 let encodedData = window.btoa(fileAsBinaryString);
                 // do whatever you want with the file content
-                this.setState({transcript: file})
+                this.setState({ transcript: file })
             };
             reader.onabort = () => console.log('file reading was aborted');
             reader.onerror = () => console.log('file reading has failed');
@@ -324,33 +324,36 @@ class EditProfile extends Component {
             transcript,
             resumeValid
         } = this.state;
-        axios.put('/api/undergrads/' + this.state.netId, {year, major, gpa, relevantCourses, relevantSkills})
+
+        axios.put('/api/undergrads/' + this.state.netId, { year, major, gpa, relevantCourses, relevantSkills })
             .then((result) => {
                 console.log("undergrad updated, result:");
                 console.log(result);
                 //access the results here....
             });
 
-        axios.post('/api/docs', {netId, resume})
+        let token_id = sessionStorage.getItem('token_id');
+
+        axios.post('/api/docs', { netId, resume, token_id, transcript })
             .then((result) => {
-                console.log("Resume updated, result:");
+                console.log("Resume and transcript updated, result:");
                 console.log(result);
                 //access the results here....
             });
 
-        axios.post('/api/docs', {netId, transcript})
-            .then((result) => {
-                console.log("Resume updated, result:");
-                console.log(result);
-                //access the results here....
-            });
+        // axios.post('/api/docs', { netId, transcript })
+        //     .then((result) => {
+        //         console.log("Resume updated, result:");
+        //         console.log(result);
+        //         //access the results here....
+        //     });
 
     };
 
     render() {
         return (
             <div>
-                <Navbar current={"editprofile"}/>
+                <Navbar current={"editprofile"} />
                 <div className="profile-page-wrapper container">
                     <div className="row">
                         <div className="title-box-prof column column-50 column-offset-25">
@@ -359,27 +362,27 @@ class EditProfile extends Component {
                             {this.state.editYear ?
                                 <div className="input-div">
                                     <input className="year edit-input" type="text" name="year" id="year"
-                                           value={this.state.year} onChange={this.handleChange.bind(this)}/>
-                                    <Check size={25} onClick={this.handleEditYear.bind(this)} className="check-icon"/>
+                                        value={this.state.year} onChange={this.handleChange.bind(this)} />
+                                    <Check size={25} onClick={this.handleEditYear.bind(this)} className="check-icon" />
                                     {this.state.invalidYear ? "Invalid Year" : ""}
                                 </div>
                                 :
 
                                 <h5>{this.state.year}<Pencil size={20} className="pencil-icon"
-                                                             onClick={this.handleEditYear.bind(this)}/></h5>
+                                    onClick={this.handleEditYear.bind(this)} /></h5>
 
                             }
                             {this.state.editMajor ?
                                 <div className="input-div">
                                     <input className="major edit-input" type="text" name="major" id="major"
-                                           value={this.state.major} onChange={this.handleChange.bind(this)}/>
-                                    <Check size={25} onClick={this.handleEditMajor.bind(this)} className="check-icon"/>
+                                        value={this.state.major} onChange={this.handleChange.bind(this)} />
+                                    <Check size={25} onClick={this.handleEditMajor.bind(this)} className="check-icon" />
                                     {this.state.invalidMajor ? "Required" : ""}
                                 </div>
                                 :
 
                                 <h5>{this.state.major} <Pencil size={20} className="pencil-icon"
-                                                               onClick={this.handleEditMajor.bind(this)}/></h5>
+                                    onClick={this.handleEditMajor.bind(this)} /></h5>
 
                             }
 
@@ -392,11 +395,11 @@ class EditProfile extends Component {
                             <div className="row red-box">
                                 <h5>Qualifications</h5>
                             </div>
-                            <hr/>
+                            <hr />
                             <div className="row qual-row trans-resume">
                                 <h5>Resume:</h5>
                                 <input type="button" className="button viewLink"
-                                       value="View" onClick={this.viewResume}/>
+                                    value="View" onClick={this.viewResume} />
                                 <Dropzone className="edit-drop" style={{
                                     position: 'relative',
                                     background: '#ededed',
@@ -412,11 +415,11 @@ class EditProfile extends Component {
                                     {this.state.resume != null ? <p>Uploaded: {this.state.resume.name}</p> : ""}
                                 </div>
                             </div>
-                            <hr/>
+                            <hr />
                             <div className="row qual-row trans-resume">
                                 <h5>Transcript:</h5>
                                 <input type="button" className="button viewLink"
-                                       value="View" onClick={this.viewTranscript}/>
+                                    value="View" onClick={this.viewTranscript} />
                                 <Dropzone className="edit-drop" style={{
                                     position: 'relative',
                                     background: '#ededed',
@@ -433,21 +436,21 @@ class EditProfile extends Component {
                                         <p >Uploaded: {this.state.transcript.name}</p> : ""}
                                 </div>
                             </div>
-                            <hr/>
+                            <hr />
                             <div className="row qual-row">
                                 {this.state.editGPA ?
                                     <div className="input-div gpa-edit">
                                         <h5>GPA: </h5>
                                         <input className="gpa edit-input" type="text" name="gpa" id="gpa"
-                                               value={this.state.gpa} onChange={this.handleChange.bind(this)}/>
+                                            value={this.state.gpa} onChange={this.handleChange.bind(this)} />
                                         <Check size={25} onClick={this.handleEditGPA.bind(this)}
-                                               className="check-icon"/>
+                                            className="check-icon" />
                                         {this.state.invalidGPA ? <p className="gpa-error">Required</p> : ""}
                                     </div>
                                     :
                                     <div className="gpa-div">
                                         <h5>GPA: <span className="clear-offset"></span> {this.state.gpa} <Pencil
-                                            size={20} className="pencil-icon" onClick={this.handleEditGPA.bind(this)}/>
+                                            size={20} className="pencil-icon" onClick={this.handleEditGPA.bind(this)} />
                                         </h5>
                                     </div>
                                 }
@@ -455,16 +458,16 @@ class EditProfile extends Component {
 
                             </div>
 
-                            <hr/>
+                            <hr />
                             <div className="row relevant-row">
 
                                 <div className="column column-49">
                                     {this.state.editCourses ?
                                         <h5>Relevant Courses <Check size={23} className="check-icon"
-                                                                    onClick={this.handleEditCourses.bind(this)}/></h5>
+                                            onClick={this.handleEditCourses.bind(this)} /></h5>
                                         :
                                         <h5>Relevant Courses <Pencil size={20} className="pencil-icon"
-                                                                     onClick={this.handleEditCourses.bind(this)}/></h5>
+                                            onClick={this.handleEditCourses.bind(this)} /></h5>
                                     }
                                     {this.displayCourses()}
                                 </div>
@@ -474,10 +477,10 @@ class EditProfile extends Component {
                                 <div className="column column-49">
                                     {this.state.editSkills ?
                                         <h5>Relevant Skills <Check size={23} className="check-icon"
-                                                                   onClick={this.handleEditSkills.bind(this)}/></h5>
+                                            onClick={this.handleEditSkills.bind(this)} /></h5>
                                         :
                                         <h5>Relevant Skills <Pencil size={20} className="pencil-icon"
-                                                                    onClick={this.handleEditSkills.bind(this)}/></h5>
+                                            onClick={this.handleEditSkills.bind(this)} /></h5>
                                     }
                                     {this.displaySkills()}
 
@@ -486,11 +489,11 @@ class EditProfile extends Component {
                             </div>
                         </div>
                     </div>
-                    <button className="column column-50" style={{marginLeft: "45%", marginTop: "20px"}}
-                            onClick={this.onClick}>Submit
+                    <button className="column column-50" style={{ marginLeft: "45%", marginTop: "20px" }}
+                        onClick={this.onClick}>Submit
                     </button>
                 </div>
-                <Footer/>
+                <Footer />
             </div>
         );
     }

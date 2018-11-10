@@ -79416,7 +79416,12 @@ var StudentDashboard = function (_Component) {
                 icon: edit,
                 iconColor: '#A5CCFE',
                 text: 'View opportunities',
-                href: '/opportunities' })
+                href: '/opportunities' }),
+              _react2.default.createElement(_DashboardAction2.default, {
+                icon: edit,
+                iconColor: '#A5CCFE',
+                text: 'Edit Profile',
+                href: '/editProfile' })
             )
           )
         ),
@@ -81446,23 +81451,27 @@ var EditProfile = function (_Component) {
                 transcript = _this$state.transcript,
                 resumeValid = _this$state.resumeValid;
 
+
             _axios2.default.put('/api/undergrads/' + _this.state.netId, { year: year, major: major, gpa: gpa, relevantCourses: relevantCourses, relevantSkills: relevantSkills }).then(function (result) {
                 console.log("undergrad updated, result:");
                 console.log(result);
                 //access the results here....
             });
 
-            _axios2.default.post('/api/docs', { netId: netId, resume: resume }).then(function (result) {
-                console.log("Resume updated, result:");
+            var token_id = sessionStorage.getItem('token_id');
+
+            _axios2.default.post('/api/docs', { netId: netId, resume: resume, token_id: token_id, transcript: transcript }).then(function (result) {
+                console.log("Resume and transcript updated, result:");
                 console.log(result);
                 //access the results here....
             });
 
-            _axios2.default.post('/api/docs', { netId: netId, transcript: transcript }).then(function (result) {
-                console.log("Resume updated, result:");
-                console.log(result);
-                //access the results here....
-            });
+            // axios.post('/api/docs', { netId, transcript })
+            //     .then((result) => {
+            //         console.log("Resume updated, result:");
+            //         console.log(result);
+            //         //access the results here....
+            //     });
         };
 
         _this.state = {
