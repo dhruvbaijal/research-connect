@@ -7,6 +7,7 @@ import '../App/App.scss';
 import './InstructorRegister.scss';
 import AutoSuggest from '../../components/AutoSuggest/AutoSuggest';
 import * as Utils from "../../components/Utils";
+import Select from 'react-select';
 
 
 class InstructorRegister extends React.Component {
@@ -36,7 +37,7 @@ class InstructorRegister extends React.Component {
             piValid: false,
             triedSubmitting: false,
             buttonDisabled: false, 
-            buttonValue: "Register"
+            buttonValue: "Register", 
         };
 
 
@@ -45,16 +46,15 @@ class InstructorRegister extends React.Component {
 
     };
 
-    // displayLabs() {
-    //   let arrayOfLabs = [];
-    //
-    //   for (let i = 0; i < this.state.data.length; i++) {
-    //       arrayOfLabs.push(<option key={this.state.data[i].name} value={this.state.data[i].name}>{this.state.data[i].name}</option>);
-    //
-    //   }
-    //   return ( <select> <option key="empty" value="">Select Lab</option> {arrayOfLabs} </select>);
-    // }
-
+     displayLabs() {
+       let arrayOfLabs = [];
+    
+       for (let i = 0; i < this.state.data.length; i++) {
+         arrayOfLabs.push({label:this.state.data[i].name, value: this.state.data[i].id});
+    
+       }
+      return arrayOfLabs;
+     }
 
     toggleNewLab() {
         this.setState({labNameValid: false});
@@ -96,6 +96,8 @@ class InstructorRegister extends React.Component {
         this.loadOpportunitiesFromServer();
 
     }
+    
+
 
     handleChangePosition(event) {
         if (event.target.value != "Select Position") {
@@ -164,18 +166,6 @@ class InstructorRegister extends React.Component {
     }
 
     handleChangeLabDescript(event) {
-        this.setState({labDescription: event.target.value});
-    }
-
-    hanldeChangelabDescript(event) {
-        this.setState({labDescription: event.target.value});
-    }
-
-    hanldeChangeLabDescript(event) {
-        this.setSTate({labDescription: event.target.value});
-    }
-
-    handleChagneLabDescript(event) {
         this.setState({labDescription: event.target.value});
     }
 
@@ -314,11 +304,10 @@ class InstructorRegister extends React.Component {
                                                onClick={this.toggleNewLab.bind(this)}/>
                                     </div>
                                     <div className="auto-div">
-                                        <AutoSuggest className="left-input"
-                                                     updateLab={this.handleUpdateLab.bind(this)}
-                                                     showDropdown={this.state.showDropdown}
-                                                     onChange={this.handleUpdateLab.bind(this)}
-                                                     data={this.state.data}
+                                        <Select className="left-input"
+                                            value = {this.handleUpdateLab.bind(this)}
+                                             onChange={this.handleUpdateLab.bind(this)}
+                                             options={this.displayLabs(this.state.data)}
                                         />
                                         {!this.state.labNameValid && this.state.triedSubmitting ?
                                             <div className="error-message">
