@@ -27,6 +27,7 @@ class Opportunities extends Component {
 			majorSelect: {},
 			startDate: {},
 			compensationSelect: {},
+			csAreaSelect: {},
 			searchBar: '',
 			matchingSearches: [],
 			searching: false,
@@ -179,12 +180,12 @@ class Opportunities extends Component {
 								<CompensationSelect updateCompensation={this.handleUpdateCompensation.bind(this)}/>
 							</div>
 
-							{/*
+							<hr />
+
 							<div className="filter-child">
-								<label htmlFor=CSAreaField>CS Area</label>
+								<label htmlFor="CSAreaField">CS Area</label>
 								<CSAreaSelect updateCSArea={this.handleUpdateCSArea.bind(this)}/>
 							</div>
-							*/}
 
 						</div>
 					</div>

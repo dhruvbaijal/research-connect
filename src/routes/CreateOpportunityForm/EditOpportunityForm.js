@@ -44,8 +44,8 @@ class EditOppForm extends React.Component {
             seasonIsValid: false,
             // compensationIsValid: false,
             yearIsValid: false,
-            triedSubmitting: false, 
-            isButtonDisabled: false, 
+            triedSubmitting: false,
+            isButtonDisabled: false,
             buttonValue: "Update Position"
         };
 
@@ -107,53 +107,6 @@ class EditOppForm extends React.Component {
                 }
             });
     }
-
-
-    /**
-     onSubmit = (e) => {
-        this.setState({triedSubmitting: true});
-        e.preventDefault();
-        // get our form data out of state
-        const {
-            netId, creatorNetId, labPage, areas, title, projectDescription, undergradTasks, qualifications, compensation,
-            startSeason, startYear, yearsAllowed, questions, requiredClasses, minGPA, minHours, maxHours, opens,
-            closes, labName, supervisor, numQuestions, titleIsValid, tasksAreValid, seasonIsValid, yearIsValid
-        } = this.state;
-        if (titleIsValid && tasksAreValid && seasonIsValid && yearIsValid) {
-            axios.post('/opportunities', {
-                netId,
-                creatorNetId,
-                labPage,
-                areas,
-                title,
-                projectDescription,
-                undergradTasks,
-                qualifications,
-                compensation,
-                startSeason,
-                startYear,
-                yearsAllowed,
-                questions,
-                requiredClasses,
-                minGPA,
-                minHours,
-                maxHours,
-                opens,
-                closes,
-                labName,
-                supervisor,
-                numQuestions
-            })
-                .then((result) => {
-                    //access the results here....
-                    document.location.href = "/professorView"
-                });
-        }
-        else {
-            window.scrollTo(0, 0);
-        }
-    };
-     */
 
     //display the questions interface to add/delete questions
     displayQuestions() {
@@ -748,7 +701,7 @@ class EditOppForm extends React.Component {
                             </div>
 
                             <div className="submit-div">
-                                <input className="button submit" type="submit" value= {this.state.buttonValue} 
+                                <input className="button submit" type="submit" value= {this.state.buttonValue}
                                 disabled = {this.state.isButtonDisabled} />
                             </div>
                         </form>

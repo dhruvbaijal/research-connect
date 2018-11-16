@@ -43,10 +43,9 @@ class CreateOppForm extends React.Component {
             titleIsValid: false,
             tasksAreValid: false,
             seasonIsValid: false,
-            // compensationIsValid: false,
             yearIsValid: false,
-            triedSubmitting: false, 
-            isButtonDisabled: false, 
+            triedSubmitting: false,
+            isButtonDisabled: false,
             buttonValue: "Submit New Position",
             loading: false
         };
@@ -54,60 +53,10 @@ class CreateOppForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.addQuestion = this.addQuestion.bind(this);
         this.displayQuestions = this.displayQuestions.bind(this);
-
-
     }
-
-    /**
-     onSubmit = (e) => {
-        this.setState({triedSubmitting: true});
-        e.preventDefault();
-        // get our form data out of state
-        const {
-            netId, creatorNetId, labPage, areas, title, projectDescription, undergradTasks, qualifications, compensation,
-            startSeason, startYear, yearsAllowed, questions, requiredClasses, minGPA, minHours, maxHours, opens,
-            closes, labName, supervisor, numQuestions, titleIsValid, tasksAreValid, seasonIsValid, yearIsValid
-        } = this.state;
-        if (titleIsValid && tasksAreValid && seasonIsValid && yearIsValid) {
-            axios.post('/opportunities', {
-                netId,
-                creatorNetId,
-                labPage,
-                areas,
-                title,
-                projectDescription,
-                undergradTasks,
-                qualifications,
-                compensation,
-                startSeason,
-                startYear,
-                yearsAllowed,
-                questions,
-                requiredClasses,
-                minGPA,
-                minHours,
-                maxHours,
-                opens,
-                closes,
-                labName,
-                supervisor,
-                numQuestions
-            })
-
-                .then((result) => {
-                    //access the results here....
-                    document.location.href = "/professorView"
-                });
-        }
-        else {
-            window.scrollTo(0, 0);
-        }
-    };
-     */
 
     //display the questions interface to add/delete questions
     displayQuestions() {
-
         let questionBoxes = [];
         for (let i = 0; i < this.state.numQuestions; i++) {
             let stateLabel = "q" + (i).toString();
@@ -125,11 +74,9 @@ class CreateOppForm extends React.Component {
         return <div className="question-boxes">
             {questionBoxes}
         </div>;
-
     }
 
     deleteQuestion(data, e) {
-
         let deleted = parseInt(data.slice(1));
         let newQnum = this.state.numQuestions - 1;
         let questionsCopy = JSON.parse(JSON.stringify(this.state.questions));
@@ -144,30 +91,18 @@ class CreateOppForm extends React.Component {
                 questionsEdit[newString] = questionsCopy[question];
             }
         }
-
-
         this.setState({numQuestions: newQnum});
-
-        this.setState({
-            questions: questionsEdit
-        });
-        // setTimeout(() => {
-        //           this.makeBoxes()
-        //       }, 40);
-
+        this.setState({questions: questionsEdit});
     }
 
     addQuestion(event) {
-
         let questionsCopy = JSON.parse(JSON.stringify(this.state.questions));
         questionsCopy["q" + (this.state.numQuestions).toString()] = '';
         this.setState({
             questions: questionsCopy
         });
         this.setState({numQuestions: this.state.numQuestions + 1});
-
     }
-
 
     createGpaOptions() {
         let options = [];
@@ -184,7 +119,6 @@ class CreateOppForm extends React.Component {
     }
 
     setYears() {
-
         let yearArray = [];
         if (this.freshman.checked) {
             yearArray.push('freshman');
@@ -217,67 +151,124 @@ class CreateOppForm extends React.Component {
         this.setState({compensation: compensationArray});
     }
 
+    setCSAreas(){
+      let csAreasArray = [];
+      if (this.cloudComputing.checked) {
+          csAreasArray.push('cloudComputing');
+      }
+      if (this.operatingSystems.checked) {
+          csAreasArray.push('operatingSystems');
+      }
+      if (this.networks.checked) {
+          csAreasArray.push('networks');
+      }
+      if (this.algorithms.checked) {
+          csAreasArray.push('algorithms');
+      }
+      if (this.humanComputerInteraction.checked) {
+          csAreasArray.push('humanComputerInteraction');
+      }
+      if (this.programmingLanguages.checked) {
+          csAreasArray.push('programmingLanguages');
+      }
+      if (this.naturalLanguageProcessing.checked) {
+          csAreasArray.push('naturalLanguageProcessing');
+      }
+      if (this.machineLearning.checked) {
+          csAreasArray.push('machineLearning');
+      }
+      if (this.robotics.checked) {
+          csAreasArray.push('robotics');
+      }
+      if (this.graphics.checked) {
+          csAreasArray.push('graphics');
+      }
+      if (this.security.checked) {
+          csAreasArray.push('security');
+      }
+      if (this.optimization.checked) {
+          csAreasArray.push('optimization');
+      }
+      if (this.computationalBiology.checked) {
+          csAreasArray.push('computationalBiology');
+      }
+      if (this.other.checked) {
+          csAreasArray.push('other');
+      }
+      let atLeastOneOptionSelected = csAreasArray.length !== 0;
+      this.setState({areas: csAreasArray});
+    }
+
     //Set values of form items in state and change their validation state if they're invalid
     handleChange(event) {
-
-        if (event.target.name === "labName") {
+        switch(event.target.name){
+          case "labName":
             this.setState({labName: event.target.value});
-        } else if (event.target.name === "netID") {
+            break;
+          case "netID":
             this.setState({creatorNetId: event.target.value});
-        } else if (event.target.name === "title") {
+            break;
+          case "title":
             if (event.target.value.length > 0) {
                 this.setState({titleIsValid: true});
             } else {
                 this.setState({titleIsValid: false});
             }
             this.setState({title: event.target.value});
-        } else if (event.target.name === "areas") {
-            let areaArray = event.target.value.split(",");
-            this.setState({areas: areaArray});
-        } else if (event.target.name === "pi") {
+            break;
+          case "pi":
             this.setState({pi: event.target.value});
-        } else if (event.target.name === "supervisor") {
+            break;
+          case "supervisor":
             this.setState({supervisor: event.target.value});
-        } else if (event.target.name === "descript") {
+            break;
+          case "descript":
             this.setState({projectDescription: event.target.value});
-        } else if (event.target.name === "tasks") {
+            break;
+          case "tasks":
             if (event.target.value.length > 0) {
                 this.setState({tasksAreValid: true});
             } else {
                 this.setState({tasksAreValid: false});
             }
             this.setState({undergradTasks: event.target.value});
-        } else if (event.target.name === "qual") {
+            break;
+          case "qual":
             this.setState({qualifications: event.target.value});
-        } else if (event.target.name === "classes") {
+            break;
+          case "classes":
             let classArray = event.target.value.split(",");
             this.setState({requiredClasses: classArray});
-        } else if (event.target.name === "startSeason") {
+            break;
+          case "startSeason":
             if (event.target.value !== "Select") {
                 this.setState({seasonIsValid: true});
             } else {
                 this.setState({seasonIsValid: false});
             }
             this.setState({startSeason: event.target.value});
-        } else if (event.target.name === "startYear") {
+            break;
+          case "startYear":
             if (event.target.value !== "Select") {
                 this.setState({yearIsValid: true});
             } else {
                 this.setState({yearIsValid: false});
             }
             this.setState({startYear: event.target.value});
-        } else if (event.target.name === "gpa") {
+            break;
+          case "gpa":
             this.setState({minGPA: event.target.value});
-        } else if (event.target.name === "min") {
+            break;
+          case "min":
             this.setState({minHours: event.target.value});
-        } else if (event.target.name === "max") {
+            break;
+          case "max":
             this.setState({maxHours: event.target.value});
-        }
-        else if (event.target.name === "additional"){
+            break;
+          case "additional":
             this.setState({additionalInformation: event.target.value})
+            break;
         }
-
-
     }
 
     handleQuestionState(i) {
@@ -297,7 +288,6 @@ class CreateOppForm extends React.Component {
     handleCloseDateChange(date) {
         this.setState({closes: date});
     }
-
 
     //takes care of sending the form data to the back-end
     onSubmit = (e) => {
@@ -332,7 +322,7 @@ class CreateOppForm extends React.Component {
             minGPA,
             minHours,
             maxHours,
-            additionalInformation, 
+            additionalInformation,
             opens,
             closes,
             labName,
@@ -389,7 +379,7 @@ class CreateOppForm extends React.Component {
                         size={150}
                         color={'#ff0000'}
                         loading={this.state.loading} />
-                </div> 
+                </div>
             );
         }
 
@@ -558,8 +548,6 @@ class CreateOppForm extends React.Component {
                             <div className="hours row input-row optional">
                                 <input className="min-hours" placeholder="Min Hours" type="text" name="min"
                                        value={this.state.minHours} onChange={this.handleChange}/>
-
-
                                 <input className="max-hours" placeholder="Max Hours" type="text" name="max"
                                        value={this.state.maxHours} onChange={this.handleChange}/>
                                 <InfoIcon data-tip data-for="info-hours" className="info-icon column column-5"
@@ -604,7 +592,6 @@ class CreateOppForm extends React.Component {
                                 </ReactTooltip>
                             </div>
 
-
                             <div className="years-allowed optional">
                                 <label className="label-inline">Years Desired: </label>
                                 <input ref={(node) => {
@@ -626,23 +613,50 @@ class CreateOppForm extends React.Component {
                                 }} onChange={this.setYears.bind(this)} type="checkbox" name="Senior" value="Senior"/>
                                 <label className="label-inline">Seniors </label>
                             </div>
-                            <div className="row input-row optional">
-                                <textarea className="column column-90"
-                                          placeholder="Topics of Research (Please separate with commas)" type="text"
-                                          name="areas" value={this.state.areas} onChange={this.handleChange}/>
-
-                                <InfoIcon data-tip data-for="info-topics" className="column column-5 info-icon"
-                                          size={20}/>
-                                <ReactTooltip place='right' id='info-topics' aria-haspopup='true' role='example'>
-                                    <div className="info-text">
-                                        <span>Examples:</span>
-                                        <ul className="info-text">
-                                            <li>Computational Biology</li>
-                                            <li>Natural Language Processing</li>
-                                            <li>Protein Classification</li>
-                                        </ul>
-                                    </div>
-                                </ReactTooltip>
+                            <div className="years-allowed optional">
+                                <label className="label-inline">CS Areas: </label>
+                                <input ref={(node) => { this.cloudComputing = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Cloud Computing and/or Distributed systems" value="Cloud Computing and/or Distributed systems"/>
+                                <label className="label-inline">Cloud Computing and/or Distributed systems</label>
+                                <input ref={(node) => { this.operatingSystems = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Operating systems" value="Operating systems"/>
+                                <label className="label-inline">Operating systems</label>
+                                <input ref={(node) => { this.networks = node}}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Computer networks" value="Computer networks"/>
+                                <label className="label-inline">Computer networks</label>
+                                <input ref={(node) => { this.algorithms = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Algorithms" value="Algorithms"/>
+                                <label className="label-inline">Algorithms</label>
+                                <input ref={(node) => { this.humanComputerInteraction = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Human-Computer Interaction" value="Human-Computer Interaction"/>
+                                <label className="label-inline">Human-Computer Interaction</label>
+                                <input ref={(node) => { this.programmingLanguages = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Programming Languages" value="Programming Languages"/>
+                                <label className="label-inline">Programming Languages</label>
+                                <input ref={(node) => { this.naturalLanguageProcessing = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Natural Language Processing" value="Natural Language Processing"/>
+                                <label className="label-inline">Natural Language Processing</label>
+                                <input ref={(node) => { this.machineLearning = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Machine Learning and/or Artificial Intelligence" value="Machine Learning and/or Artificial Intelligence"/>
+                                <label className="label-inline">Machine Learning and/or Artificial Intelligence</label>
+                                <input ref={(node) => { this.robotics = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Robotics" value="Robotics"/>
+                                <label className="label-inline">Robotics</label>
+                                <input ref={(node) => { this.graphics = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Graphics" value="Graphics"/>
+                                <label className="label-inline">Graphics</label>
+                                <input ref={(node) => { this.security = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Security" value="Security"/>
+                                <label className="label-inline">Security</label>
+                                <input ref={(node) => { this.cloudComputing = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Optimization" value="Optimization"/>
+                                <label className="label-inline">Optimization</label>
+                                <input ref={(node) => { this.computationalBiology = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Computational Biology" value="Computational Biology"/>
+                                <label className="label-inline">Computational Biology</label>
+                                <input ref={(node) => { this.other = node }}
+                                       onChange={this.setCSAreas.bind(this)} type="checkbox" name="Other" value="Other"/>
+                                <label className="label-inline">Other</label>
                             </div>
 
                              <div className="row input-row optional">
@@ -654,11 +668,9 @@ class CreateOppForm extends React.Component {
                                 <InfoIcon data-tip data-for="info-additional" className="column column-5 info-icon"
                                           size={20}/>
                                 <ReactTooltip place='right' id='info-additional' aria-haspopup='true' role='example'>
-                                <div className="info-text">
-                                        <span>Include any other relevant information to your opportunity not already described in the form.</span>
-
-                                    </div>
-
+                                  <div className="info-text">
+                                    <span>Include any other relevant information to your opportunity not already described in the form.</span>
+                                  </div>
                                 </ReactTooltip>
                             </div>
 
@@ -691,9 +703,8 @@ class CreateOppForm extends React.Component {
                                         apply.</p>
                                 </ReactTooltip>
                                 <p>Here you can add any position-specific questions or
-                                    requests for additional information, which students will be required to answer in
-                                    order to apply.</p>
-
+                                   requests for additional information, which students will be required to answer in
+                                   order to apply.</p>
                                 {this.displayQuestions()}
                                 <div className="add-question" onClick={this.addQuestion}>
                                     <span>ADD QUESTION</span>

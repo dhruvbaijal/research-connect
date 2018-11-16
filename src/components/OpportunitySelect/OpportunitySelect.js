@@ -17,7 +17,6 @@ class OpportunitySelect extends React.Component {
 
 	render() {
     const options = this.props.opportunities.map((opp) => <option value={ opp }>{ opp }</option>)
-
     return (
       <div className="opportunity-select">
         <select onChange={this.changeOpportunity}>

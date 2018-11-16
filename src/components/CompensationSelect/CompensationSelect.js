@@ -13,8 +13,8 @@ class CompensationSelect extends React.Component {
 	handleChange(e) {
 		this.setState({
 			compensationSelect: {
-				"Money": this.money.checked,
-				"Credit": this.credit.checked
+				"pay": this.money.checked,
+				"credit": this.credit.checked
 			}
 		}, function () {
 			//update parent's state with the current state of the checkboxes (compensationSelect)
@@ -27,11 +27,11 @@ class CompensationSelect extends React.Component {
 			<div className="compensation-select-wrapper">
 				<input ref={(node) => {
 					this.money = node
-				}} onChange={this.handleChange.bind(this)} type="checkbox" name="Money" value="Money"/>Money
+				}} onChange={this.handleChange.bind(this)} type="checkbox" name="pay" value="pay"/>Money
 				<br/>
 				<input ref={(node) => {
 					this.credit = node
-				}} onChange={this.handleChange.bind(this)} type="checkbox" name="Credit" value="Credit"/>Credit
+				}} onChange={this.handleChange.bind(this)} type="checkbox" name="credit" value="credit"/>Credit
 			</div>
 		);
 	}

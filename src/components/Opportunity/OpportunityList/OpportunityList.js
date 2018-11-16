@@ -24,73 +24,52 @@ class OpportunityList extends Component {
 			return(countString);
 		}
 
+		union(arr1, arr2){
+			return arr1.filter(function(i) { return arr2.indexOf(i) > -1};
+		}
+
+		checkboxFilter(filterSelected, filterAllowed){
+			return filterSelected.length == 0 || this.union(filterSelected, filterAllowed);
+		}
 
 		render() {
 				let oppNodes = this.props.data.map(opp => {
-				/*The variable 'willshow' will be set to false if any filter excludes this opportunity */
-				let willShow = true;
+				let willShow = true; //set to false if any filter excludes this opportunity
 				const filteredOptions = this.props.filteredOptions;
-				/**
-				 * filter for years allowed. Saying if the Freshman option is checked (hence the .Freshman, since it's a checkbox
-				 so that value must either be true or false) and if this row has freshman in its array of years allowed, then
-				 we return true and should show this opportunity
-				 */
-				let yearsSelected = Object.keys(filteredOptions.yearSelect).filter(function (k){
-					return filteredOptions.yearSelect[k]
-				});
-				let yearsAllowed = opp.yearsAllowed;
-				console.log(yearsSelected);
-				console.log(yearsAllowed);
-				let matchingSearches = filteredOptions.matchingSearches;
-				let csSelected = filteredOptions.majorSelect.cs;
-				let bioSelected = filteredOptions.majorSelect.biology;
-				let minGPA = filteredOptions.gpaSelect.val;
-				let season = filteredOptions.startDate.season;
-				let year = filteredOptions.startDate.year;
-				let moneySelected = filteredOptions.compensationSelect.Money;
-				let creditSelected = filteredOptions.compensationSelect.Credit;
-				let compensations = opp.compensation;
 
-				if (filteredOptions.searchBar!="" && filteredOptions.clickedEnter){
-					let matches = false
+				let matchingSearches = filteredOptions.matchingSearches;
+				if (filteredOptions.searchBar !== "" && filteredOptions.clickedEnter){
+					let matches = false;
 					for (let i = 0; i<matchingSearches.length; i++){
-						if(matchingSearches[i]==opp._id){
+						if(matchingSearches[i] === opp._id){
 							matches = true;
 						}
 					}
-					if (!matches){
-						willShow = false;
-					}
+					willShow = matches;
 				}
 
-				let anyYearFilters = yearsSelected.length == 0;
-				let passedYearFilter = yearsAllowed.filter(function(year) { return yearsSelected.indexOf(year) > -1}).length != 0;
-				willShow = willShow && (anyYearFilters || passedYearFilter);
+				let yearsSelected = Object.keys(filteredOptions.yearSelect).filter(function (k){ return filteredOptions.yearSelect[k] });
+				let yearsAllowed = opp.yearsAllowed;
+				willShow = willShow && this.checkboxFilter(yearsSelected, yearsAllowed);
 
-				/**
-					* Similar to above, checks if the cs box is checked in the majorSelect component (a bunch of major checkboxes)
-					* and also checks to see if this opportunity is in the cs area.
-					*
-				if (!((csSelected && opp.areas.indexOf("Computer Science") != -1) ||
-						(bioSelected && opp.areas.indexOf("Biology") != -1) ||
-						(!csSelected && !bioSelected))) {
-							willShow = false;
-				}
-				*/
-
-				if (minGPA &&(minGPA < opp.minGPA)){
+				let minGPA = filteredOptions.gpaSelect.val;
+				if (minGPA && minGPA < opp.minGPA){
 							willShow = false;
 				}
 
-				if (season &&((season!=opp.startSeason) || (year!=opp.startYear))){
+				let season = filteredOptions.startDate.season;
+				let year = filteredOptions.startDate.year;
+				if (season && (season != opp.startSeason || year != opp.startYear)){
 							willShow = false;
 				}
 
-				if (!((moneySelected && compensations.indexOf("pay") != -1) ||
-					(creditSelected && compensations.indexOf("credit") != -1) ||
-					(!moneySelected && !creditSelected)))  {
-						willShow = false;
-				}
+				let csAreasSelected = Object.keys(filteredOptions.csAreaSelect).filter(function (k){ return filteredOptions.csAreaSelect[k] });
+				let csAreasAllowed = opp.areas;
+				willShow = willShow && this.checkboxFilter(csAreasSelected, csAreasAllowed);
+
+				let compensationsSelected = Object.keys(filteredOptions.compensationSelect).filter(function (k){ return filteredOptions.compensationSelect[k] });
+				let compensationsAllowed = opp.compensation;
+				willShow = willShow && this.checkboxFilter(compensationsSelected, compensationsAllowed);
 
 				if (willShow){
 						return (
@@ -134,7 +113,6 @@ class OpportunityList extends Component {
 							</div>
 							{ oppNodes }
 					</div>
-
 				)
 		}
 }

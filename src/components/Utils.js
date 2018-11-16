@@ -26,6 +26,17 @@ export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+export function selectCSAreasFilter(csArea, name){
+  return ( <input ref={(node) => {	this.csArea = node }}) onChange={this.handleChange.bind(this)} type="checkbox"/>
+            {name}
+            <br/> );
+}
+
+export function selectCSAreasOpp(csArea, name){
+  return (<input ref={(node) => { this.csArea = node }} onChange={this.setCSAreas.bind(this)} type="checkbox"/>
+          <label className="label-inline"> {name} </label> );
+}
+
 /**
  * Takes care of the response and checking for errors specifically due to outdated tokens.
  * If there is a session error, it'll sign them out, redirect them to the index page, and return true.
