@@ -90,27 +90,29 @@ function roleToInt(role) {
 function getLabAdmin(oppId) {
     console.log("The id we are working with is: " + oppId);
     labModel.find({opportunities: mongoose.Types.ObjectId(oppId)}, function (err, lab) {
-        if (lab != null) {
-            var admins = [];
-            for (var i = 0; i < lab.length; i++) {
+        if (lab) {
+            let admins = [];
+            for (let i = 0; i < lab.length; i++) {
                 console.log("This lab is: " + lab[i]);
-                for (var j = 0; j < lab[i].labAdmins.length; j++) {
+                for (let j = 0; j < lab[i].labAdmins.length; j++) {
                     admins.push(lab[i].labAdmins[j]);
                 }
             }
-            var maximum = "";
-            var maxStatus = "";
-            for (var i = 0; i < admins.length; i++) {
+            let maximum = "";
+            let maxStatus = "";
+            for (let i = 0; i < admins.length; i++) {
                 //console.log("We are working with netid: "+admins[i]);
                 labAdministratorModel.findOne({netId: admins[i]}, function (err2, ad) {
-                    if (ad != null) {
-                        var r = ad['role'];
+                    if (ad) {
+                        let r = ad['role'];
                         if (roleToInt(r) > roleToInt(maxStatus)) {
                             maximum = ad['netId'];
                             maxStatus = r;
                         }
                         if (i >= admins.length - 1) {
-                            return maximum;
+                          console.log("Here maximum is this: "+maximum);
+                          opp["contactName"] = maximum;
+                          return maximum;
                         }
                     }
                 });
@@ -149,7 +151,7 @@ app.get('/', function (req, res) {
     let token = req.query.netId;
     let urlLabId = req.query.labId;
     let sortOrderObj = {opens: sortOrder};
-    if (token != undefined) {
+    if (token) {
         verify(token, function (undergradNetId) {
             debug("here! " + undergradNetId);
             //find the undergrad so we can get their info to determine the "preqreqs match" field
@@ -239,6 +241,7 @@ app.get('/', function (req, res) {
                                     opportunities[i].yearsAllowed.includes(common.gradYearToString(undergrad1.gradYear))) {
                                     prereqsMatch = true;
                                 }
+                                debug("h");
                                 let thisLab = findLabWithAdmin(labs, opportunities[i].creatorNetId);
                                 //prevent "undefined" values if there's some error
                                 if (thisLab === undefined) thisLab = { name: "", labPage: "", labDescription: "" };
@@ -246,17 +249,54 @@ app.get('/', function (req, res) {
                                 opportunities[i]["labName"] = thisLab.name;
                                 opportunities[i]["labPage"] = thisLab.labPage;
                                 opportunities[i]["labDescription"] = thisLab.labDescription;
-                                /**
-                                if (opportunities[i]["contactName"] === 'dummy value') {
+                                debug(opportunities[i]);
+                                debug(Object.getOwnPropertyNames(opportunities[i]));
+                                if (opportunities[i]["contactName"] === 'dummy value'){
                                     console.log("In here");
-                                    let contact = getLabAdmin(opportunities[i]._id);
-                                    //TODO this won't work because getLabAdmin has asynchronous functions, use a promise
+                                    //var contact = getLabAdmin(opportunities[i]._id,opportunities[i]);
+
                                     //var contact = getLabAdmin();
-                                    opportunities[i]["contactName"] = contact;
+                                    //opportunities[i]["contactName"] = contact;
+                                    let oppId = opportunities[i]._id;
+                                    labModel.find({opportunities:mongoose.Types.ObjectId(oppId)},function(err,lab){
+                                        if (lab) {
+                                            debug("The lab is not null");
+                                            let admins = [];
+                                            for (let i = 0; i<lab.length;i++){
+                                                debug("This lab is: "+lab[i]);
+                                                for (let j = 0; j<lab[i].labAdmins.length; j++){
+                                                    admins.push(lab[i].labAdmins[j]);
+                                                }
+                                            }
+                                            let maximum = "";
+                                            let maxStatus = "";
+                                            for(let i = 0; i<admins.length; i++){
+                                                //console.log("We are working with netid: "+admins[i]);
+                                                labAdministratorModel.findOne({netId:admins[i]}, function(err2,ad){
+                                                    if (ad){
+                                                        debug("Ad is not null");
+                                                        let r = ad['role'];
+                                                        if (roleToInt(r) > roleToInt(maxStatus)){
+                                                            maximum = ad['netId'];
+                                                            maxStatus = r;
+                                                        }
+                                                        if (i >= admins.length-1){
+                                                            debug("Here maximum is this: "+maximum);
+                                                            opportunities[i]["contactName"] = maximum;
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            debug("We done goofed");
+                                        }
+                                    });
+
+                                } else {
+                                    console.log("Contact names are already in");
                                 }
-                                console.log("Here is the contactName: " + opportunities[i]["contactName"]);
-                                console.log("Here is the additional info: " + opportunities[i]["additionalInformation"]);
-                                 */
+                                debug("Here is the contactName: "+opportunities[i]["contactName"]);
+                                debug("Here is the additional info: "+opportunities[i]["additionalInformation"]);
                             }
                             res.send(opportunities);
                         });
@@ -565,6 +605,9 @@ app.get('/:id', function (req, res) {
     debug("id: " + req.params.id);
     verify(req.query.netId, function (tokenNetId) {
         debug("toke net id: " + tokenNetId);
+        if (!req.params || !req.params.id){
+            return res.send({});
+        }
         opportunityModel.findById(req.params.id).lean().exec(function (err, opportunity) {
             if (err) {
                 debug(err);
@@ -572,6 +615,11 @@ app.get('/:id', function (req, res) {
             }
             debug("opportunity below:");
             debug(opportunity);
+            if (!opportunity){
+                return res.send("");
+            }
+            //get all labs, then find the lab that has an opportunity equal to this opportunity's id
+            //TODO convert this into a mongoose query if possible
             labModel.find({}, function (err2, labs) {
                 if (err2) {
                     debug(err);
@@ -594,6 +642,7 @@ app.get('/:id', function (req, res) {
                 }
                 debug("here");
                 debug(labAdmins);
+                //get the info of one of the lab admins
                 labAdministratorModel.findOne(
                     {
                         $and: [
@@ -601,15 +650,25 @@ app.get('/:id', function (req, res) {
                             { role: { $in: ["pi", "postdoc", "grad", "staffscientist", "labtech"] } }
                         ]
                     },
+
+                    //in this section, we attach the info of the student who requested this. This is used to fill in the
+                    //qualifications section (I think) on the front-end. This should probably only happen if there is
+                    //some query parameter, but we never got around to doing that. TODO
                     function (err, labAdmin) {
                         debug(labAdmin);
-                        opportunity.pi = labAdmin.firstName + " " + labAdmin.lastName;
-                        undergradModel.findOne({ netId: tokenNetId }, function (error3, student) {
+                        if (!labAdmin){
+                            opportunity.pi = "No lab members found"
+                        }
+                        else {
+                            //TODO how do we know this is the PI? I think ".pi" may be a misleading name.
+                            opportunity.pi = labAdmin.firstName + " " + labAdmin.lastName;
+                        }
+                        undergradModel.findOne({netId: tokenNetId}, function (error3, student) {
                             if (student === undefined) {
                                 opportunity.student = {
-                                    "firstName": "rachel",
-                                    "lastName": "nash",
-                                    "gradYear": 2020,
+                                    "firstName": "John",
+                                    "lastName": "Smith",
+                                    "gradYear": (new Date()).getFullYear() + 1,
                                     "major": "Computer Science",
                                     "gpa": 4.3,
                                     "netId": "rsn55",

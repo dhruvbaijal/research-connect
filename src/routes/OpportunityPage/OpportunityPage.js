@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './OpportunityPage.scss';
-import Navbar from '../../components/Navbars/StudentNavbar/StudentNavbar';
-import ProfessorNavbar from '../../components/Navbars/ProfessorNavbar/ProfessorNavbar';
+import Navbar from '../../components/Navbars/StudentNavbar/StudentNavbar'
+import ProfessorNavbar from '../../components/Navbars/ProfessorNavbar/ProfessorNavbar'
 import Footer from '../../components/Footer/Footer';
-import { Container, Row, Col } from 'reactstrap';
 import CheckBox from 'react-icons/lib/fa/check-square-o';
-import Check from 'react-icons/lib/fa/check';
-import Minus from 'react-icons/lib/fa/minus';
 import CrossCircle from 'react-icons/lib/fa/minus-circle';
-import * as Utils from '../../components/Utils.js';
-
+import * as Utils from '../../components/Utils.js'
 
 //Utils.gradYearToString(2020) == "Sophomore"
 
@@ -26,7 +22,8 @@ class OpportunityPage extends Component {
             student: null,
             coverLetter: '',
             netId: 'unknown',
-            role: ''
+            role: '',
+            detectedLoggedOut: false,
         };
 
         this.parseClasses = this.parseClasses.bind(this);
@@ -53,6 +50,14 @@ class OpportunityPage extends Component {
         return true;
     }
 
+    sendToHome(error) {
+        if (!this.state.detectedLoggedOut) {
+            Utils.handleTokenError(error);
+            window.location.href = "/test.com";
+            console.log("done");
+            this.setState({ detectedLoggedOut: true });
+        }
+    }
 
     handleChange(key) {
         let answersCopy = JSON.parse(JSON.stringify(this.state.questionAnswers));
@@ -96,7 +101,8 @@ class OpportunityPage extends Component {
                 .then((result) => {
                     console.log(result);
                 }).catch(function (error) {
-                    Utils.handleTokenError(error);
+                    this.sendToHome(error);
+                    // Utils.handleTokenError(error);
                 });
 
         }
@@ -124,7 +130,7 @@ class OpportunityPage extends Component {
                 }
             })
             .catch(function (error) {
-                Utils.handleTokenError(error);
+                this.sendToHome(error);
             });
         axios.get('/api/undergrads/' + sessionStorage.getItem('token_id'))
             .then((response) => {
@@ -133,7 +139,8 @@ class OpportunityPage extends Component {
                 }
             })
             .catch(function (error) {
-                Utils.handleTokenError(error);
+                this.sendToHome(error);
+                // Utils.handleTokenError(error);
             });
     }
 
@@ -220,62 +227,50 @@ class OpportunityPage extends Component {
         let yearDivArray = [];
         if (yearsArray) {
             let trackYear = false;
-            if (this.state.student && yearsArray.includes(Utils.gradYearToString(this.state.student.gradYear).toLowerCase())) {
-                console.log(Utils.gradYearToString(this.state.student.gradYear).toLowerCase() + "jii");
-
-                var s = Utils.gradYearToString(this.state.student.gradYear)
-                yearDivArray.push(<div key="f"><CheckBox className="greenCheck" /><span key="sophomore">   {s}</span>
-                </div>)
+            if (yearsArray.includes("freshman")) {
+                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Freshman") {
+                    yearDivArray.push(<div key="f"><CheckBox className="greenCheck" /><span key="fresh"> Freshman</span>
+                    </div>)
+                }
+                else {
+                    yearDivArray.push(<div key="f"><CrossCircle className="cross" /><span key="fresh"> Freshman</span>
+                    </div>)
+                }
                 trackYear = true;
             }
-            else {
-
-                if (yearsArray.includes("freshman")) {
-                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Freshman") {
-
-                    }
-                    else {
-                        yearDivArray.push(<div key="f"><CrossCircle className="cross" /><span key="fresh">   Freshman</span>
-                        </div>)
-                    }
-                    trackYear = true;
+            if (yearsArray.includes("sophomore")) {
+                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Sophomore") {
+                    yearDivArray.push(<div key="so"><CheckBox className="greenCheck" /><span > Sophomore</span></div>)
                 }
-                if (yearsArray.includes("sophomore")) {
-                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Sophomore") {
-
-                    }
-                    else {
-                        yearDivArray.push(<div key="so"><CrossCircle className="cross" /><span >   Sophomore</span></div>)
-                    }
-                    trackYear = true;
+                else {
+                    yearDivArray.push(<div key="so"><CrossCircle className="cross" /><span > Sophomore</span></div>)
                 }
-                if (yearsArray.includes("junior")) {
-                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Junior") {
+                trackYear = true;
+            }
+            if (yearsArray.includes("junior")) {
+                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Junior") {
+                    yearDivArray.push(<div key="j"><CheckBox className="greenCheck" /><span > Junior</span></div>)
+                } else {
+                    yearDivArray.push(<div key="j"><CrossCircle className="cross" /><span > Junior</span></div>)
 
-                    } else {
-                        yearDivArray.push(<div key="j"><CrossCircle className="cross" /><span >   Junior</span></div>)
-
-                    }
-                    trackYear = true;
                 }
-                if (yearsArray.includes("senior")) {
-                    if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Senior") {
+                trackYear = true;
+            }
+            if (yearsArray.includes("senior")) {
+                if (this.state.student && Utils.gradYearToString(this.state.student.gradYear) === "Senior") {
+                    yearDivArray.push(<div key="se"><CheckBox className="greenCheck" /><span > Senior</span></div>)
+                } else {
+                    yearDivArray.push(<div key="se"><CrossCircle className="cross" /><span > Senior</span></div>)
 
-                    } else {
-                        yearDivArray.push(<div key="se"><CrossCircle className="cross" /><span >   Senior</span></div>)
-
-                    }
-                    trackYear = true;
                 }
-
-
+                trackYear = true;
             }
             if (trackYear) {
                 return <ul>{yearDivArray}</ul>;
             }
             else {
                 return <ul>
-                    <div key="n"><span> No Preference</span></div>
+                    <div key="n"><CheckBox className="greenCheck" /><span> No Preference</span></div>
                 </ul>
             }
         }
@@ -286,7 +281,7 @@ class OpportunityPage extends Component {
         let returnArray = [];
         if (arrayIn) {
             if (arrayIn.length === 0) {
-                returnArray.push(<div key="none"><span
+                returnArray.push(<div key="none"><CheckBox key="no" className="greenCheck" /><span
                     key="n"> No Preference</span></div>);
             }
             for (let i = 0; i < arrayIn.length; i++) {
@@ -306,7 +301,7 @@ class OpportunityPage extends Component {
         let returnArray = []
         if (arrayIn) {
             if (arrayIn.length === 0) {
-                returnArray.push(<div key="none"><span
+                returnArray.push(<div key="none"><CheckBox key="no" className="greenCheck" /><span
                     key="n"> No Preference</span></div>);
             }
             for (let i = 0; i < arrayIn.length; i++) {
@@ -324,18 +319,23 @@ class OpportunityPage extends Component {
     parseGPA(gpa, isStudent) {
         //if minGPA is falsy or falls in range
         if (!this.state.minGPA || (this.state.student && this.state.opportunity && this.state.opportunity.minGPA <= this.state.student.gpa)) {
-            if (this.state.opportunity.minGPA) {
-                return <p key={0}> <CheckBox className="greenCheck" /><span> {this.state.opportunity.minGPA}</span></p>;
-            }
-            else {
-                return <p key={0}> <span>  No Preference</span></p>;
-            }
-            // <CheckBox className="greenCheck" /><span> {this.state.opportunity.minGPA ? this.state.opportunity.minGPA : "No Preference"}</span></p>;
+            return <p key={0}><CheckBox className="greenCheck" /><span> {this.state.opportunity.minGPA ? this.state.opportunity.minGPA : "No Preference"}</span></p>;
         }
         else {
             return <p key={1}><CrossCircle className="cross" /><span> {this.state.opportunity.minGPA}</span></p>;
         }
 
+    }
+
+    parseCompensation(compensation) {
+        if (this.state.opportunity && this.state.opportunity.compensation) {
+            if (this.state.opportunity.compensation.indexOf("pay") != -1) {
+                if (this.state.opportunity.compensation.indexOf("credit") != -1) { return <div> Credit or pay. </div>; }
+                return <div> Pay only.</div>;
+            }
+            if (this.state.opportunity.compensation.indexOf("credit") != -1) { return <div> Credit only.</div>; }
+        }
+        return <div> None.</div>
     }
 
     componentDidMount() {
@@ -352,10 +352,10 @@ class OpportunityPage extends Component {
                 }
             })
             .catch(function (error) {
-                Utils.handleTokenError(error);
+                this.sendToHome(error);
+                // Utils.handleTokenError(error);
             });
     }
-
 
     render() {
         const notProvidedMessage = "Not specified";
@@ -373,13 +373,14 @@ class OpportunityPage extends Component {
                                     <div>{this.state.opportunity.labName}</div>
                                 </div>
                                 <div className="column right-column">
-                                    {isLab &&
-                                        <a className="button" href={"/EditOpp?Id=" + this.getId() + "/"}>Edit Opportunity</a>
-                                    }
                                     {!isLab &&
                                         <a className="button" href="#Application">Apply</a>
                                         /* { this.state.opportunity.ghostPost ? ": Rolling Admission" : this.convertDate(this.state.opportunity.closes) } */
                                     }
+                                    {isLab &&
+                                        <a className="button" href={"/EditOpp?Id=" + this.getId() + "/"}>Edit Opportunity</a>
+                                    }
+
                                 </div>
                             </div>
                             <div className="row">
@@ -409,6 +410,13 @@ class OpportunityPage extends Component {
                                             {this.state.opportunity.minHours ? this.state.opportunity.minHours : "No minimum"}-
 											{this.state.opportunity.maxHours ? this.state.opportunity.maxHours + " " : "No maximum"} hours a week.
 										</div>
+                                    </div>
+                                    <div className="opp-details-section">
+                                        <div className="header">Compensation</div>
+                                        <div>
+                                            {this.state.opportunity.compensation ? this.state.opportunity.compensation : "None"}
+
+                                        </div>
                                     </div>
                                     <div className="opp-details-section">
                                         <div className="header">Project Description</div>

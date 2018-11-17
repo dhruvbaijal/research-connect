@@ -86,10 +86,10 @@ class StudentDashboard extends Component {
                 text="View opportunities"
                 href='/opportunities' />
               <DashboardAction
-                icon={edit}
+                icon={ edit }
                 iconColor="#A5CCFE"
-                text="Edit Profile"
-                href='/editProfile'  />
+                text="Edit profile"
+                href='/editprofile' />
             </div>
             
           </div>
