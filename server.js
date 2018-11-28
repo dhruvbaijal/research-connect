@@ -66,7 +66,6 @@ const labRoute = require('./api/labs');
 const docsRoute = require('./api/docs');
 const classesRoute = require('./api/classes');
 
-
 app.use('/api/', index);
 app.use('/api/labAdmins', labAdminsRoute);
 app.use('/api/opportunities', opportunityRoute);
@@ -76,7 +75,6 @@ app.use('/api/faculty', facultyRoute);
 app.use('/api/labs', labRoute);
 app.use('/api/messages', messagesRoute);
 app.use('/api/docs', docsRoute);
-
 app.use('/api/classes', classesRoute);
 
 // router.get('/', function (req, res) {

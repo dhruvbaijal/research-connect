@@ -1,25 +1,29 @@
-/**
- * Send a request to /applications/:id, where "id" is the id of the application
- * Returns the application object with that id
- */
 let express = require('express');
 let app = express.Router();
-let { undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken,
-    verify, handleVerifyError } = require('../common.js');
+let { classesModel, undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken, s3, mongoose, verify, handleVerifyError } = require('../common.js');
 let common = require('../common.js');
-const mongoose = require('mongoose');
+const BUCKET_NAME = process.env.BUCKET_NAME;
 
-app.get('/:id', function (req, res) {
-    let appId = req.params.id;
-    opportunityModel.find({}, function (err, docs) {
-        for (let i = 0; i < docs.length; i++) {
-            let opportunityObject = docs[i];
-            for (let j = 0; j < opportunityObject.applications.length; j++) {
-                if (opportunityObject.applications[j].id === appId) {
-                    res.send(opportunityObject.applications[j]);
-                    return;
-                }
-            }
+
+//*eturns (`res.send()`s) all the classes in the following array: 
+//[{"label": classFull (that's a field in the model), "value": id of that class}, ... and so on for every class]
+app.get('/', function (req, res) {
+    classModel.find({}, function (err, classes) {
+        if (err) {
+            res.send(err);
+            //handle the error appropriately
+            return; //instead of putting an else
         }
+        res.send(classes);
+
     });
+
 });
+
+function generateId() {
+    return (Date.now().toString() + Math.random().toString()).replace(".", "");
+}
+
+
+
+module.exports = app;

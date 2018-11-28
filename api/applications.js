@@ -4,9 +4,9 @@
  */
 let express = require('express');
 let app = express.Router();
-let {undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken,
-verify, handleVerifyError} = require('../common.js');
-let common = require('../common.js');
+let { undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken,
+    verify, handleVerifyError } = require('../common.js');
+let = require('../common.js');
 const mongoose = require('mongoose');
 
 app.get('/:id', function (req, res) {
@@ -23,7 +23,7 @@ app.get('/:id', function (req, res) {
         }
     });
 });
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("938750905686-krm3o32tgqofhdb05mivarep1et459sm.apps.googleusercontent.com");
 
 //previously POST /getApplications
@@ -33,12 +33,12 @@ app.get('/', function (req, res) {
         // let labAdminId = tokenBody.email.replace("@cornell.edu", "");
         let opportunitiesArray = [];
         let reformatted = {};
-        labAdministratorModel.findOne({netId: labAdminId}, function (err, labAdmin) {
+        labAdministratorModel.findOne({ netId: labAdminId }, function (err, labAdmin) {
             if (err) {
                 res.send(err);
                 return;
             }
-            if (labAdmin === null){
+            if (labAdmin === null) {
                 return res.status(401).send({});
             }
             labModel.findById(labAdmin.labId, function (err, lab) {
@@ -121,7 +121,7 @@ app.get('/', function (req, res) {
                 });
             });
         });
-    }).catch(function(error){
+    }).catch(function (error) {
         handleVerifyError(error, res);
     });
 });
@@ -136,7 +136,7 @@ app.post('/', function (req, res) {
         }
 
         //if req.body is not empty and (netid is falsy or netid is unknown)
-        if (req.body && (!req.body.netId || req.body.netId === "unknown")){
+        if (req.body && (!req.body.netId || req.body.netId === "unknown")) {
             return res.send("");
         }
         let application = {
@@ -148,17 +148,17 @@ app.post('/', function (req, res) {
             "skills": [],
             "opportunity": opportunity.title
         };
-        undergradModel.find({"netId":req.body.netId},function(err,u){
-            console.log("undergrad is: "+u[0].skills);
+        undergradModel.find({ "netId": req.body.netId }, function (err, u) {
+            console.log("undergrad is: " + u[0].skills);
             application.skills = u[0].skills;
             console.log("Application dictionary set");
-            console.log("Skills be: "+application.skills);
+            console.log("Skills be: " + application.skills);
             opportunity.applications.push(application);
             opportunity.save(function (err) {
             });
             res.send("success!");
         });
-        
+
         /*
         if(application['skills'].length > 0){
             console.log("good job you printed skills");
