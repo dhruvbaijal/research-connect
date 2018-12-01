@@ -1,6 +1,6 @@
 let express = require('express');
 let app = express.Router();
-let { classesModel, undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken, s3, mongoose, verify, handleVerifyError } = require('../common.js');
+let { classesModel } = require('../common.js');
 let common = require('../common.js');
 const BUCKET_NAME = process.env.BUCKET_NAME;
 
@@ -8,7 +8,7 @@ const BUCKET_NAME = process.env.BUCKET_NAME;
 //*eturns (`res.send()`s) all the classes in the following array: 
 //[{"label": classFull (that's a field in the model), "value": id of that class}, ... and so on for every class]
 app.get('/', function (req, res) {
-    classModel.find({}, function (err, classes) {
+    classesModel.find({}, function (err, classes) {
         if (err) {
             res.send(err);
             //handle the error appropriately
