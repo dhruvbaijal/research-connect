@@ -1,6 +1,6 @@
 let express = require('express');
 let app = express.Router();
-let {undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken, mongoose, verify} = require('../common.js');
+let { undergradModel, labAdministratorModel, opportunityModel, labModel, debug, replaceAll, sgMail, decryptGoogleToken, mongoose, verify } = require('../common.js');
 let common = require('../common.js');
 
 
@@ -49,7 +49,7 @@ app.post('/', function (req, res) {
 
     lab.save(function (err) {
         if (err) {
-            res.status(500).send({"errors": err.errors});
+            res.status(500).send({ "errors": err.errors });
             debug(err);
         } //Handle this error however you see fit
         else {

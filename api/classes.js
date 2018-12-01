@@ -14,7 +14,26 @@ app.get('/', function (req, res) {
             //handle the error appropriately
             return; //instead of putting an else
         }
-        res.send(classes);
+        console.log(classes.length);
+        var arr = [];
+        for (var i = 0; i < classes.length; i++) {
+
+            let classesObject = classes[i];
+            console.log(classesObject.classFull + "\n");
+            console.log(classesObject._id);
+            var text =
+            {
+                "value": classesObject._id,
+                "label": classesObject.classFull,
+
+
+            }
+
+            arr.push(text);
+
+        }
+        res.send(arr);
+
 
     });
 
