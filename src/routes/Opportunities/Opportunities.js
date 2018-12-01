@@ -2,28 +2,23 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import './Opportunities.scss';
 import '../../index.css';
-import Navbar from '../../components/Navbars/StudentNavbar/StudentNavbar'
+import Navbar from '../../components/Navbars/StudentNavbar/StudentNavbar';
+import ProfessorNavbar from "../../components/Navbars/ProfessorNavbar/ProfessorNavbar";
 import Footer from '../../components/Footer/Footer';
 import logo from '../../images/vectorlogo.png';
 import OpportunityBox from '../../components/Opportunity/OpportunityBox/OpportunityBox';
-import YearSelect from '../../components/YearSelect/YearSelect';
-import MajorSelect from '../../components/MajorSelect/MajorSelect';
-import GPASelect from '../../components/GPASelect/GPASelect';
-import StartDate from '../../components/StartDate/StartDate';
-import CompensationSelect from '../../components/CompensationSelect/CompensationSelect';
-import CSAreaSelect from '../../components/CSAreaSelect/CSAreaSelect';
+import FilterBox from '../../components/Filter/FilterBox/FilterBox';
 import DeleteIcon from 'react-icons/lib/ti/delete';
 import SearchIcon from 'react-icons/lib/io/search';
 import * as Utils from '../../components/Utils';
-import ProfessorNavbar from "../../components/Navbars/ProfessorNavbar/ProfessorNavbar";
 
 class Opportunities extends Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			yearSelect: {},
-			gpaSelect: {},
+			yearSelect: [],
+			gpaSelect: '',
 			startDate: {},
 			compensationSelect: {},
 			csAreaSelect: {},

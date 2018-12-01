@@ -44,11 +44,11 @@ class OpportunityList extends Component {
 						willShow = matches;
 					}
 
-					let yearsSelected = Object.keys(filteredOptions.yearSelect).filter(function (k){ return filteredOptions.yearSelect[k] });
+					let yearsSelected = filteredOptions.yearSelect;
 					let yearsAllowed = opp.yearsAllowed;
 					willShow = willShow && this.checkboxFilter(yearsSelected, yearsAllowed);
 
-					let minGPA = filteredOptions.gpaSelect.val;
+					let minGPA = filteredOptions.gpaSelect;
 					if (minGPA && minGPA < opp.minGPA){
 								willShow = false;
 					}
@@ -59,15 +59,13 @@ class OpportunityList extends Component {
 								willShow = false;
 					}
 
-					let csAreasSelected = Object.keys(filteredOptions.csAreaSelect).filter(function (k){ return filteredOptions.csAreaSelect[k] });
+					let csAreasSelected = filteredOptions.csAreaSelect;
 					let csAreasAllowed = opp.areas;
-					willShow = willShow && (csAreasSelected.length === 0 || csAreasAllowed.filter(function(i) { return csAreasSelected.indexOf(i) > -1 }));
-					//willShow = willShow && this.checkboxFilter(csAreasSelected, csAreasAllowed);
+					willShow = willShow && this.checkboxFilter(csAreasSelected, csAreasAllowed);
 
-					let compensationsSelected = Object.keys(filteredOptions.compensationSelect).filter(function (k){ return filteredOptions.compensationSelect[k] });
+					let compensationsSelected = filteredOptions.compensationSelect;
 					let compensationsAllowed = opp.compensation;
-					willShow = willShow && (compensationsSelected.length === 0 || compensationsSelected.filter(function(i) { return compensationsAllowed.indexOf(i) > -1 }));
-					//willShow = willShow && this.checkboxFilter(compensationsSelected, compensationsAllowed);
+					willShow = willShow && this.checkboxFilter(compensationsSelected, compensationsAllowed);
 
 					if (willShow){
 							return (

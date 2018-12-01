@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import * as Constants from '../../components/Constants'
 
 class Filter extends React.Component {
   /* examples
@@ -9,6 +10,8 @@ class Filter extends React.Component {
   constructor(props){
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.createCheckbox = this.createCheckbox.bind(this);
+    this.createSelect = this.createSelect.bind(this);
   }
 
   handleChange(e){
@@ -46,10 +49,19 @@ class Filter extends React.Component {
   }
 
   render(){
+    let filter;
+
+    if(this.props.type === Constants.SELECT){
+      filter = this.createSelect();
+    }
+    else if(this.props.type === Constants.CHECKBOX){
+      filter = this.createCheckbox();
+    }
+
     return (
       <div className="filter-child">
         <label htmlFor={this.props.labelRef}>{this.props.label}</label>
-        //choose select or checkbox
+        {filter}
       </div>
     );
   }//end render
