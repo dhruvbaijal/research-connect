@@ -49,7 +49,7 @@ class OpportunityList extends Component {
 					willShow = willShow && this.checkboxFilter(yearsSelected, yearsAllowed);
 
 					let minGPA = filteredOptions.gpaSelect;
-					if (minGPA && minGPA < opp.minGPA){
+					if (minGPA != '' && minGPA < opp.minGPA){
 								willShow = false;
 					}
 

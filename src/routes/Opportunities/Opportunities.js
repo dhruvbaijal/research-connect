@@ -17,11 +17,11 @@ class Opportunities extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			yearSelect: [],
+			yearSelect: [], //["freshmen", "sophomore"...]
 			gpaSelect: '',
-			startDate: {},
-			compensationSelect: {},
-			csAreaSelect: {},
+			startDate: {}, //{"season":"Fall", "year":"2018"}
+			compensationSelect: [], //["pay", "credit"...]
+			csAreaSelect: [], //["ai","robotics"...]
 			searchBar: '',
 			matchingSearches: [],
 			searching: false,
