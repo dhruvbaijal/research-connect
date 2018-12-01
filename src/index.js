@@ -16,6 +16,7 @@ import ApplicationPage from './routes/ApplicationPage/ApplicationPage';
 import EditProfile from './routes/EditProfile/EditProfile';
 import FacultySearch from './routes/FacultySearch/FacultySearch';
 import FacultyPage from './routes/FacultyPage/FacultyPage';
+import ContactForm from './routes/Contact/ContactForm';
 import Doc from './routes/Doc/Doc';
 import LandingPage from './routes/LandingPage/LandingPage';
 
@@ -37,6 +38,7 @@ ReactDOM.render(
             <Route exact path='/editProfile' component={EditProfile} />
             <Route exact path='/facultySearch' component={FacultySearch} />
             <Route exact path='/' component={LandingPage} />
+            <Route exact path='/contact' component={ContactForm}/>
             <Route path='/*' component={Error} />
         </Switch>
     </BrowserRouter>, document.getElementById('root')

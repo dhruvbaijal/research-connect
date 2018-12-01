@@ -69,7 +69,6 @@ class CreateOppForm extends React.Component {
                             className="deleter-icon"/>
                 </div>
             );
-
         }
         return <div className="question-boxes">
             {questionBoxes}
@@ -398,7 +397,6 @@ class CreateOppForm extends React.Component {
                               method='post'
                               onSubmit={this.onSubmit}
                         >
-
                             <div
                                 className={!this.state.titleIsValid && this.state.triedSubmitting ? "row input-row wrong" : "row input-row"}>
 
@@ -439,7 +437,6 @@ class CreateOppForm extends React.Component {
                                             <li>Data analytics in Excel</li>
                                         </ul>
                                     </div>
-
                                 </ReactTooltip>
                             </div>
 
@@ -467,7 +464,6 @@ class CreateOppForm extends React.Component {
                                 <ReactTooltip place='right' id='info-start' aria-haspopup='true' role='example'>
                                     <p className="info-text">Indicates the semester the student will start working in
                                         the lab.</p>
-
                                 </ReactTooltip>
                             </div>
 
@@ -494,7 +490,6 @@ class CreateOppForm extends React.Component {
                                     <p className="info-text">Apprentice will conduct a genetic screen to discover
                                         novel genes required for tissue morphogenesis and will be trained in
                                         general wet-lab work and microdissection. </p>
-
                                 </ReactTooltip>
                             </div>
 
@@ -517,7 +512,6 @@ class CreateOppForm extends React.Component {
                                             <li>Above B+ in Intro Chem</li>
                                         </ul>
                                     </div>
-
                                 </ReactTooltip>
                             </div>
 

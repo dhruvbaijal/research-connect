@@ -6,11 +6,13 @@
   background-color: #b31b1b;
   border-color: #b31b1b;
 }
+
 .landingPage *{
 
 	box-sizing: border-box;
   font: 'Roboto';
 }
+
 .landingPage section .get-started:hover{
   opacity: 0.9;
   border-color: #b31b1b;
@@ -25,7 +27,6 @@
     text-decoration: none;
     color: inherit;
     cursor: pointer;
-
 }
 
 .landingPage a:hover {
@@ -56,6 +57,7 @@
 	align-items: center;
 	padding: 125px 12%;
 }
+
 .our-work .students-title h2{
   font-size: 43px;
   line-height: 45px;
@@ -63,15 +65,14 @@
 
 
 }
+
 .our-work .students-title{
   text-align: left;
-
 }
-.background-image {
 
+.background-image {
 	background-image: url("../../images/stockphoto.png");
 	background-size: 100% 100%;
-
 }
 
 @media (max-width: 1000px) {
@@ -268,21 +269,12 @@
   padding-left: 48px;
   padding-right: 48px;
 }
-.hero h3{
-  color: white;
-}
+
 .hero .white-button{
   background-color: white;
   color: rgb(166,57,45);
   border-color: white;
   margin: auto 10px;
-}
-.hero h1{
-  padding-top: 100px;
-	font: bold 75px 'Roboto', sans-serif;
-	margin-bottom: 15px;
-  color: #f6f6f6;
-
 }
 
 .hero h1 {
@@ -295,6 +287,7 @@
 .hero h3 {
     font: normal 28px 'Roboto', sans-serif;
     margin-bottom: 40px;
+    color: white;
 }
 
 .hero a.btn {

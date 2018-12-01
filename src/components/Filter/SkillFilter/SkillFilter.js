@@ -6,9 +6,7 @@ class SkillSelect extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {
-			skills: []
-		}
+		this.state = { skills: [] }
 	}
 
   addSkill() {
@@ -46,15 +44,13 @@ class SkillSelect extends React.Component {
 	        <button className="add-button" onClick={this.addSkill.bind(this)}>Add</button>
 	      </div>
         <ul>
-          {
-          	this.state.skills.map((skill) => {
+          { this.state.skills.map((skill) => {
               return (
                 <li onClick={ () => this.removeSkill(skill) }>
                   { skill } <FaTimesCircle style={{verticalAlign: 'text-top'}} />
                 </li>
               )
-          	})
-          }
+          	})}
         </ul>
       </div>
 		);

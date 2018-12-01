@@ -26,16 +26,35 @@ export function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function selectCSAreasFilter(csArea, name){
-  return ( <input ref={(node) => {	this.csArea = node }}) onChange={this.handleChange.bind(this)} type="checkbox"/>
-            {name}
-            <br/> );
-}
+/*
+const csAreas = {	"cloudComputing": "Cloud Computing and/or Distributed systems",
+              		"operatingSystems": "Operating systems",
+              		"networks": "Computer networks",
+              		"algorithms": "Algorithms",
+              		"humanComputerInteraction": "Human-Computer Interaction",
+              		"programmingLanguages": "Programming Languages",
+              		"naturalLanguageProcessing": "Natural Language Processing",
+              		"machineLearning": "Machine Learning and/or Artificial Intelligence",
+              		"robotics": "Robotics",
+              		"graphics": "Graphics",
+              		"security": "Security",
+              		"optimization": "Optimization",
+              		"computationalBiology": "Computational Biology",
+              		"other": "Other" };
 
-export function selectCSAreasOpp(csArea, name){
-  return (<input ref={(node) => { this.csArea = node }} onChange={this.setCSAreas.bind(this)} type="checkbox"/>
-          <label className="label-inline"> {name} </label> );
+export function allCSAreasOpp(csAreas){
+  for(csArea in csAreas){
+    selectCSAreasOpp(csArea, csAreas[csArea]);
+  }
 }
+*/
+/*
+function selectCSAreasOpp(csArea, name){
+  return (<div>
+            <input ref={(node) => { this[csArea] = node }} onChange={this.setCSAreas.bind(this)} type="checkbox"/>
+            <label className="label-inline"> {name} </label>
+          </div>);
+}*/
 
 /**
  * Takes care of the response and checking for errors specifically due to outdated tokens.

@@ -14,7 +14,7 @@ import CompensationSelect from '../../components/CompensationSelect/Compensation
 import CSAreaSelect from '../../components/CSAreaSelect/CSAreaSelect';
 import DeleteIcon from 'react-icons/lib/ti/delete';
 import SearchIcon from 'react-icons/lib/io/search';
-import * as Utils from "../../components/Utils";
+import * as Utils from '../../components/Utils';
 import ProfessorNavbar from "../../components/Navbars/ProfessorNavbar/ProfessorNavbar";
 
 class Opportunities extends Component {
@@ -24,7 +24,6 @@ class Opportunities extends Component {
 		this.state = {
 			yearSelect: {},
 			gpaSelect: {},
-			majorSelect: {},
 			startDate: {},
 			compensationSelect: {},
 			csAreaSelect: {},
@@ -34,6 +33,12 @@ class Opportunities extends Component {
 			clickedEnter: false,
 			role: ''
 		};
+
+		this.handleYearFilter = this.handleYearFilter.bind(this);
+		this.handleGPAFilter = this.handleGPAFilter.bind(this);
+		this.handleStartDateFilter = this.handleStartDateFilter.bind(this);
+		this.handleCompensationFilter = this.handleCompensationFilter.bind(this);
+		this.handleCSAreaFilter = this.handleCSAreaFilter.bind(this);
 	}
 
 	componentDidMount() {
@@ -52,28 +57,52 @@ class Opportunities extends Component {
 			});
 	}
 
-	handleUpdateYear(yearObj) {
-		this.setState({yearSelect: yearObj});
+	handleYearFilter(e){
+		this.setState({yearSelect: event.target.value});
 	}
 
-	handleUpdateGPA(gpaObj) {
-		this.setState({gpaSelect: gpaObj});
+	handleGPAFilter(e){
+		this.setState({gpaSelect: event.target.value});
 	}
 
-	handleUpdateMajor(majorObj) {
-		this.setState({majorSelect: majorObj});
+	handleStartDateFilter(e) {
+		const choice = event.target.value;
+
+		if(choice === "any"){
+			this.setState({startDate: { "season": null, "year": null }})
+		}
+		else{
+			let tmp = choice.split(" ");
+			this.setState({startDate: { "season": tmp[0],	"year": tmp[1] }});
+		}
 	}
 
-	handleUpdateDate(dateObj) {
-		this.setState({startDate: dateObj});
+	handleCompensationFilter(e){
+		const choice = event.target.value;
+		this.setState(function(prevState){
+			const temp = prevState.compensationSelect.slice();
+			if(temp.indexof(choice) != -1){
+				temp.push(choice);
+			}
+			else{
+				temp.pop(choice);
+			}
+			return {compensationSelect:temp};
+		});
 	}
 
-	handleUpdateCompensation(compensationObj){
-		this.setState({compensationSelect: compensationObj});
-	}
-
-	handleUpdateCSArea(csAreaObject){
-		this.setState({csAreaSelect: csAreaObject});
+	handleCSAreaFilter(e){
+		const choice = event.target.value;
+		this.setState(function(prevState){
+			const temp = prevState.csAreaSelect.slice();
+			if(temp.indexof(choice) != -1){
+				temp.push(choice);
+			}
+			else{
+				temp.pop(choice);
+			}
+			return {csAreaSelect:temp};
+		});
 	}
 
 	handleUpdateSearch(e) {
@@ -131,70 +160,38 @@ class Opportunities extends Component {
 						className="search-bar" onKeyPress={this.handleKeyPress.bind(this)}
 						onChange={this.handleUpdateSearch.bind(this)} value={this.state.searchBar}
 						type="text" name="search"
-						placeholder="Search keywords (e.g. psychology, machine learning, Social Media Lab)" />
+						placeholder="Search keywords (e.g. psychology, machine learning, Social Media Lab)"
+					/>
 					<div className="delete-div">
 						{
-						this.state.searchBar != "" ?
-							<DeleteIcon
-								onClick={this.clearSearch.bind(this)}
-								className="clear-icon"
-								style={{ height: '100%' }}
-								size={36} />
-						: ""
+							this.state.searchBar != "" ?
+								<DeleteIcon
+									onClick={this.clearSearch.bind(this)}
+									className="clear-icon"
+									style={{ height: '100%' }}
+									size={36} />
+							: ""
 						}
 					</div>
 				</div>
 
 				<div className="opp-container row">
 					<div className="column column-20">
-						<div className="filter-box">
-							<div className="filter-child">
-								Filter by...
-							</div>
-
-							<hr />
-
-							<div className="filter-child">
-								<label htmlFor="yearField">School Year</label>
-								<YearSelect updateYear={this.handleUpdateYear.bind(this)} />
-							</div>
-
-							<hr />
-
-							<div className="filter-child">
-								<label htmlFor="gpaField">GPA Requirement</label>
-								<GPASelect updateGPA={this.handleUpdateGPA.bind(this)} />
-							</div>
-
-							<hr />
-
-							<div className="filter-child">
-								<label htmlFor="startDateField">Start Date</label>
-								<StartDate updateDate={this.handleUpdateDate.bind(this)}/>
-							</div>
-
-							<hr />
-
-							<div className="filter-child">
-								<label htmlFor="compensationField">Compensation</label>
-								<CompensationSelect updateCompensation={this.handleUpdateCompensation.bind(this)}/>
-							</div>
-
-							<hr />
-
-							<div className="filter-child">
-								<label htmlFor="CSAreaField">CS Area</label>
-								<CSAreaSelect updateCSArea={this.handleUpdateCSArea.bind(this)}/>
-							</div>
-
-						</div>
+						<FilterBox
+							handleYearFilter={this.handleYearFilter}
+							handleGPAFilter={this.handleGPAFilter}
+							handleStartDateFilter={this.handleStartDateFilter}
+							handleCompensationFilter={this.handleCompensationFilter}
+							handleCSAreaFilter={this.handleCSAreaFilter}
+						/>
 					</div>
 
 					<div className="column opportunities-list-wrapper">
 						<OpportunityBox
 							filteredOptions={this.state}
 							url='opportunities'
-							searching={this.state.clickedEnter} />
+							searching={this.state.clickedEnter}
+						/>
 					</div>
 				</div>
 

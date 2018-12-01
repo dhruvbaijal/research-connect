@@ -15,7 +15,6 @@ class AutoSuggest extends React.Component {
             suggestionLength: 0,
             highlightLabName: '',
             highlightLabId: null
-
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);

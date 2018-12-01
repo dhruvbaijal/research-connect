@@ -1,0 +1,28 @@
+.checkbox-wrapper{
+	input {
+		margin-bottom: 0;
+		position: relative;
+		bottom: 5px;
+	}
+}
+
+.select-wrapper{
+	padding-bottom: 25px;
+
+	.add-button {
+		float: right;
+	  background-color: #b31b1b;
+	  color: white;
+	  border-color: #b31b1b;
+	}
+	.add-bottom:hover {
+	  opacity: 0.9;
+	  border-color: #b31b1b;
+	}
+
+	li {
+		list-style: none;
+		font-weight: 400;
+		cursor: pointer;
+	}
+}
