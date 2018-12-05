@@ -261,13 +261,14 @@ class EditProfile extends Component {
     }
 
     onDropResume = acceptedFiles => {
+        console.log("We are dropping resume");
         acceptedFiles.forEach(file => {
             const reader = new FileReader();
             reader.onload = (event) => {
                 let fileAsBinaryString = reader.result;
                 let encodedData = window.btoa(fileAsBinaryString);
                 // do whatever you want with the file content
-                this.setState({ resume: file })
+                this.setState({ resume: [encodedData] })
                 this.setState({ resumeValid: true })
             };
             reader.onabort = () => console.log('file reading was aborted');
@@ -275,7 +276,7 @@ class EditProfile extends Component {
 
             reader.readAsBinaryString(file);
         });
-
+        console.log("We have finished dropping resume");
 
     }
 
@@ -286,7 +287,7 @@ class EditProfile extends Component {
                 let fileAsBinaryString = reader.result;
                 let encodedData = window.btoa(fileAsBinaryString);
                 // do whatever you want with the file content
-                this.setState({ transcript: file })
+                this.setState({ transcript: [encodedData] })
             };
             reader.onabort = () => console.log('file reading was aborted');
             reader.onerror = () => console.log('file reading has failed');
@@ -295,6 +296,48 @@ class EditProfile extends Component {
         });
 
     }
+
+    /*
+    onSubmit = (e) => {
+        console.log("Begin EditProfile onSubmit");
+        e.preventDefault();
+        const {
+            firstName,
+            lastName,
+            year,
+            major,
+            gpa,
+            relevantCourses,
+            relevantSkills,
+            editYear,
+            editMajor,
+            editGPA,
+            editCourses,
+            editSkills,
+            invalidYear,
+            invalidMajor,
+            invalidGPA,
+            newCourse,
+            newSkill,
+            netId,
+            resumeId,
+            transcriptId,
+            resume,
+            transcript,
+            resumeValid
+        } = this.state;
+        let token_id = sessionStorage.getItem('token_id');
+
+        axios.put('/api/undergrads/' + this.state.netId, { year, major, gpa, relevantCourses, relevantSkills })
+            .then((result) => {
+                console.log("undergrad updated, result:");
+                console.log(result);
+                //access the results here....
+            });
+
+    }
+    */
+
 
     onClick = (e) => {
         console.log("Is this working?");
@@ -334,12 +377,34 @@ class EditProfile extends Component {
 
         let token_id = sessionStorage.getItem('token_id');
 
+        if (this.state.resume != null && this.state.resume.length !== 0){
+            axios.post('/api/docs', {token_id, resume})
+                .then((result) => {
+                    console.log("Resume updated, result: ");
+                    console.log(result);
+                }).catch(function (error) {
+                    console.log("Error in posting resume");
+                    console.log(error);
+            });
+        }
+        if (this.state.transcript != null && this.state.transcript.length !== 0){
+            axios.post('/api/docs', {token_id, transcript})
+                .then((result) => {
+                    console.log("Transcript updated, result: ");
+                    console.log(result);
+                }).catch(function (error) {
+                    console.log("Error in posting transcript");
+                    console.log(error);
+            });
+        }
+        /*
         axios.post('/api/docs', { netId, resume, token_id, transcript })
             .then((result) => {
                 console.log("Resume and transcript updated, result:");
                 console.log(result);
                 //access the results here....
             });
+            */
 
         // axios.post('/api/docs', { netId, transcript })
         //     .then((result) => {
